@@ -343,6 +343,53 @@
   }
   .export-success.show { display: flex; }
 
+  /* ── NEED OPTION TILES ── */
+  .need-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .need-option:hover {
+    border-color: var(--accent);
+    background: #eef4ff;
+  }
+  .need-option.selected {
+    border-color: var(--accent);
+    background: #e8f0fc;
+  }
+  .need-icon { font-size: 20px; flex-shrink: 0; }
+  .need-text { flex: 1; }
+  .need-title { font-size: 13px; font-weight: 600; color: var(--text); }
+  .need-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .need-check {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    opacity: 0;
+    transition: opacity 0.15s;
+    flex-shrink: 0;
+  }
+  .need-option.selected .need-check { opacity: 1; }
+
+  .need-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
   /* ── VALIDATION ERRORS ── */
   .field-error label {
     color: #c0392b !important;
@@ -790,38 +837,123 @@
       </div>
       <div class="card">
         <div class="card-title">🎯 Primary Need</div>
-        <div class="grid2">
-          <div class="field span2">
-            <label>Primary Insurance Goal — Select or choose "Other" to describe</label>
-            <select id="primaryNeedSelect" onchange="handlePrimaryNeedSelect()" style="margin-bottom:10px;">
-              <option value="">Select the client's primary goal…</option>
-              <option value="Protect my family's income if I pass away unexpectedly">Income protection — protect my family if I pass away</option>
-              <option value="Pay off the mortgage so my family can keep the home">Mortgage protection — pay off the home if I die</option>
-              <option value="Replace lost income and cover living expenses for my dependents">Income replacement for dependents</option>
-              <option value="Leave a financial legacy and estate for my children">Estate planning — leave a legacy for my children</option>
-              <option value="Cover final expenses, funeral costs, and outstanding debts">Final expenses — cover funeral and outstanding debts</option>
-              <option value="Build tax-sheltered savings while maintaining life coverage">Tax-sheltered growth combined with life insurance</option>
-              <option value="Supplement retirement income with tax-efficient cash value">Supplement retirement income through policy cash value</option>
-              <option value="Protect my business and key partners in the event of my death">Business continuity / key person protection</option>
-              <option value="Fund my children's education if I am no longer here">Education funding for children</option>
-              <option value="Cover critical illness or disability expenses to protect my lifestyle">Critical illness or disability protection</option>
-              <option value="other">✏️ Other — I'll describe in my own words</option>
-            </select>
-            <!-- Shows only when "Other" is selected -->
-            <div id="primaryNeedCustomWrap" style="display:none;">
-              <label style="margin-bottom:5px; display:block;">Describe in client's own words</label>
-              <textarea id="primaryNeedCustom" rows="3"
-                placeholder="Type the client's primary insurance goal in their own words…"
-                oninput="syncPrimaryNeed()"
-                style="width:100%; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:9px 12px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; outline:none; resize:vertical; line-height:1.5;">
-              </textarea>
+        <div class="field">
+          <label>Primary Insurance Goals — Select all that apply</label>
+          <div id="needOptionsGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px;">
+
+            <label class="need-option" onclick="toggleNeedOption(this)">
+              <div class="need-icon">🏠</div>
+              <div class="need-text">
+                <div class="need-title">Mortgage Protection</div>
+                <div class="need-sub">Pay off the home if I die</div>
+              </div>
+              <div class="need-check">✓</div>
+            </label>
+
+            <label class="need-option" onclick="toggleNeedOption(this)">
+              <div class="need-icon">👨‍👩‍👧</div>
+              <div class="need-text">
+                <div class="need-title">Income Protection</div>
+                <div class="need-sub">Protect my family's income if I pass away</div>
+              </div>
+              <div class="need-check">✓</div>
+            </label>
+
+            <label class="need-option" onclick="toggleNeedOption(this)">
+              <div class="need-icon">💵</div>
+              <div class="need-text">
+                <div class="need-title">Income Replacement</div>
+                <div class="need-sub">Replace lost income for dependents</div>
+              </div>
+              <div class="need-check">✓</div>
+            </label>
+
+            <label class="need-option" onclick="toggleNeedOption(this)">
+              <div class="need-icon">🏛️</div>
+              <div class="need-text">
+                <div class="need-title">Estate Planning</div>
+                <div class="need-sub">Leave a legacy for my children</div>
+              </div>
+              <div class="need-check">✓</div>
+            </label>
+
+            <label class="need-option" onclick="toggleNeedOption(this)">
+              <div class="need-icon">⚰️</div>
+              <div class="need-text">
+                <div class="need-title">Final Expenses</div>
+                <div class="need-sub">Cover funeral and outstanding debts</div>
+              </div>
+              <div class="need-check">✓</div>
+            </label>
+
+            <label class="need-option" onclick="toggleNeedOption(this)">
+              <div class="need-icon">📈</div>
+              <div class="need-text">
+                <div class="need-title">Tax-Sheltered Growth</div>
+                <div class="need-sub">Build savings with life coverage</div>
+              </div>
+              <div class="need-check">✓</div>
+            </label>
+
+            <label class="need-option" onclick="toggleNeedOption(this)">
+              <div class="need-icon">🏖️</div>
+              <div class="need-text">
+                <div class="need-title">Retirement Supplement</div>
+                <div class="need-sub">Supplement retirement via cash value</div>
+              </div>
+              <div class="need-check">✓</div>
+            </label>
+
+            <label class="need-option" onclick="toggleNeedOption(this)">
+              <div class="need-icon">🏢</div>
+              <div class="need-text">
+                <div class="need-title">Business / Key Person</div>
+                <div class="need-sub">Protect business and partners</div>
+              </div>
+              <div class="need-check">✓</div>
+            </label>
+
+            <label class="need-option" onclick="toggleNeedOption(this)">
+              <div class="need-icon">🎓</div>
+              <div class="need-text">
+                <div class="need-title">Education Fund</div>
+                <div class="need-sub">Fund children's education if I'm gone</div>
+              </div>
+              <div class="need-check">✓</div>
+            </label>
+
+            <label class="need-option" onclick="toggleNeedOption(this)">
+              <div class="need-icon">🏥</div>
+              <div class="need-text">
+                <div class="need-title">Critical Illness / Disability</div>
+                <div class="need-sub">Protect lifestyle from illness or injury</div>
+              </div>
+              <div class="need-check">✓</div>
+            </label>
+
+          </div>
+
+          <!-- Selected Goals Summary — shows below tiles as selections are made -->
+          <div id="selectedNeedsWrap" style="display:none; margin-top:16px; background:#e8f0fc; border:1.5px solid #b8cef0; border-radius:10px; padding:14px 16px;">
+            <div style="font-size:10px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:10px;">
+              ✓ Selected Goals
             </div>
-            <!-- Hidden field used for validation and export -->
-            <input id="primaryNeed" type="hidden" value="" />
+            <div id="selectedNeedsTags" style="display:flex; flex-wrap:wrap; gap:8px;">
+            </div>
           </div>
-          <!-- Selected value preview -->
-          <div id="primaryNeedPreview" class="span2" style="display:none; background:#eef4ff; border:1px solid #b8cef0; border-radius:8px; padding:10px 14px; font-size:13px; color:var(--soft); line-height:1.6;">
+
+          <!-- Other free text -->
+          <div style="margin-top:12px;">
+            <label style="font-size:11px; font-weight:600; color:var(--soft); text-transform:uppercase; letter-spacing:0.6px; display:block; margin-bottom:6px;">✏️ Additional Goals (optional — describe in client's own words)</label>
+            <textarea id="primaryNeedCustom" rows="2"
+              placeholder="Any other goals not listed above, or additional context in the client's own words…"
+              oninput="syncPrimaryNeed()"
+              style="width:100%; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:9px 12px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; outline:none; resize:vertical; line-height:1.5; transition: border-color 0.15s;">
+            </textarea>
           </div>
+
+          <!-- Hidden field for validation + export -->
+          <input id="primaryNeed" type="hidden" value="" />
         </div>
       </div>
       <div class="card">
@@ -1429,31 +1561,42 @@ function calcExpenses() {
   document.getElementById('monthlyExpenses').value = total;
 }
 
-function handlePrimaryNeedSelect() {
-  const sel = document.getElementById('primaryNeedSelect').value;
-  const customWrap = document.getElementById('primaryNeedCustomWrap');
-  const preview = document.getElementById('primaryNeedPreview');
-  const hidden = document.getElementById('primaryNeed');
+function toggleNeedOption(el) {
+  el.classList.toggle('selected');
+  updatePrimaryNeedValue();
+}
 
-  if (sel === 'other') {
-    customWrap.style.display = 'block';
-    preview.style.display = 'none';
-    hidden.value = document.getElementById('primaryNeedCustom').value;
-  } else if (sel) {
-    customWrap.style.display = 'none';
-    preview.style.display = 'block';
-    preview.innerHTML = `<strong style="color:var(--accent);">✓ Selected:</strong> ${sel}`;
-    hidden.value = sel;
+function updatePrimaryNeedValue() {
+  const selected = Array.from(document.querySelectorAll('.need-option.selected'))
+    .map(el => el.querySelector('.need-title').textContent.trim());
+  const custom = document.getElementById('primaryNeedCustom').value.trim();
+
+  // Update tags display
+  const wrap = document.getElementById('selectedNeedsWrap');
+  const tagsEl = document.getElementById('selectedNeedsTags');
+
+  if (selected.length > 0) {
+    wrap.style.display = 'block';
+    tagsEl.innerHTML = selected.map(s =>
+      `<span class="need-tag">✓ ${s}</span>`
+    ).join('');
   } else {
-    customWrap.style.display = 'none';
-    preview.style.display = 'none';
-    hidden.value = '';
+    wrap.style.display = 'none';
+    tagsEl.innerHTML = '';
   }
+
+  // Build combined value for hidden field + export
+  const all = [...selected];
+  if (custom) all.push(custom);
+  document.getElementById('primaryNeed').value = all.join(' | ');
 }
 
 function syncPrimaryNeed() {
-  document.getElementById('primaryNeed').value = document.getElementById('primaryNeedCustom').value;
+  updatePrimaryNeedValue();
 }
+
+// Keep handlePrimaryNeedSelect as no-op in case any old reference exists
+function handlePrimaryNeedSelect() {}
 
 function toggleRider(btn) {
   btn.classList.toggle('selected');
@@ -1671,7 +1814,10 @@ function exportFNA() {
   <!-- 4. NEEDS ANALYSIS -->
   <div class="sec">
     <div class="sec-title">4 · Needs Analysis</div>
-    <div class="fld" style="margin-bottom:10px"><div class="fld-lbl">Primary Client Goal</div><div class="fld-val">${g('primaryNeed') || '—'}</div></div>
+    <div class="fld" style="margin-bottom:10px">
+      <div class="fld-lbl">Primary Client Goals</div>
+      <div class="fld-val">${g('primaryNeed') ? g('primaryNeed').split(' | ').map(goal => `<span style="display:inline-block;background:#163458;color:#fff;font-size:8px;font-weight:700;padding:2px 8px;border-radius:20px;margin:2px 3px 2px 0;">${goal}</span>`).join('') : '—'}</div>
+    </div>
     <table class="tbl">
       <tr><th>Need Category</th><th>Details</th><th>Amount</th></tr>
       <tr><td>Income Replacement</td><td>${g('yearsReplace') || '—'} years × ${formatC(g('incomeReplace'))}/yr</td><td>${formatC(g('incomeTotal'))}</td></tr>
