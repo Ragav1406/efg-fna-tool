@@ -335,6 +335,22 @@
   }
   .export-success.show { display: flex; }
 
+  /* ── VALIDATION ERRORS ── */
+  .field-error label {
+    color: #c0392b !important;
+  }
+  .field-error input,
+  .field-error select,
+  .field-error textarea {
+    border-color: #e05c5c !important;
+    background: #fff8f8 !important;
+    box-shadow: 0 0 0 3px rgba(192,57,43,0.1) !important;
+  }
+  .field-error input[type=checkbox] {
+    outline: 2px solid #e05c5c;
+    outline-offset: 2px;
+  }
+
   /* ── MOBILE ── */
   @media (max-width: 768px) {
     .sidebar { display: none; }
@@ -1043,7 +1059,156 @@ const totalSteps = 8;
 document.getElementById('meetingDate').value = new Date().toISOString().split('T')[0];
 document.getElementById('sigDate').value = new Date().toISOString().split('T')[0];
 
+/* ══════════════════════════════════════════════
+   VALIDATION — required fields per step
+   ══════════════════════════════════════════════ */
+const stepValidation = {
+  0: [
+    { id: 'advisorName',    label: 'Advisor Full Name' },
+    { id: 'licenseNumber',  label: 'LLQP License Number' },
+    { id: 'meetingDate',    label: 'Meeting Date' },
+  ],
+  1: [
+    { id: 'clientFirst',   label: 'First Name' },
+    { id: 'clientLast',    label: 'Last Name' },
+    { id: 'dob',           label: 'Date of Birth' },
+    { id: 'gender',        label: 'Gender' },
+    { id: 'marital',       label: 'Marital Status' },
+    { id: 'occupation',    label: 'Occupation' },
+    { id: 'employer',      label: 'Employer' },
+    { id: 'address',       label: 'Street Address' },
+    { id: 'city',          label: 'City' },
+    { id: 'postal',        label: 'Postal Code' },
+    { id: 'phone',         label: 'Phone' },
+    { id: 'email',         label: 'Email' },
+    { id: 'beneficiary',   label: 'Beneficiary Name' },
+    { id: 'benefRel',      label: 'Beneficiary Relationship' },
+  ],
+  2: [
+    { id: 'clientIncome',    label: 'Client Annual Income' },
+    { id: 'householdIncome', label: 'Total Household Income' },
+    { id: 'monthlyExpenses', label: 'Monthly Expenses' },
+    { id: 'assets',          label: 'Total Assets' },
+    { id: 'liabilities',     label: 'Total Liabilities' },
+    { id: 'networth',        label: 'Net Worth' },
+    { id: 'existingLife',    label: 'Existing Life Insurance Coverage' },
+  ],
+  3: [
+    { id: 'primaryNeed',     label: 'Primary Insurance Goal' },
+    { id: 'incomeReplace',   label: 'Income to Replace' },
+    { id: 'yearsReplace',    label: 'Years to Replace' },
+    { id: 'debtCoverage',    label: 'Mortgage / Debt Coverage' },
+    { id: 'finalExpenses',   label: 'Final Expenses' },
+    { id: 'totalNeed',       label: 'Total Insurance Need' },
+    { id: 'coverageGap',     label: 'Coverage Gap' },
+    { id: 'needsNotes',      label: 'Additional Notes' },
+  ],
+  4: [
+    { id: 'riskProfile',  label: 'Risk Profile' },
+    { id: 'horizon',      label: 'Investment Horizon' },
+    { id: 'volatility',   label: 'Comfort with Volatility' },
+    { id: 'objective',    label: 'Primary Investment Objective' },
+    { id: 'riskNotes',    label: 'Risk Assessment Notes' },
+  ],
+  5: [
+    { id: 'productType',  label: 'Product Type' },
+    { id: 'productName',  label: 'Product Name' },
+    { id: 'company',      label: 'Insurance Company' },
+    { id: 'faceAmount',   label: 'Face Amount' },
+    { id: 'premium',      label: 'Premium Amount' },
+    { id: 'deathBenefit', label: 'Death Benefit Type' },
+    { id: 'rationale',    label: 'Suitability Rationale' },
+    { id: 'alternatives', label: 'Alternatives Considered' },
+    { id: 'whySelected',  label: 'Why This Product Was Selected' },
+  ],
+  6: [
+    { id: 'conflicts',    label: 'Conflicts of Interest' },
+    { id: 'sigDate',      label: 'Client Signature Date' },
+    { id: 'clientConsent', label: 'Client Acknowledgment', type: 'checkbox' },
+    { id: 'advisorConsent', label: 'Advisor Declaration', type: 'checkbox' },
+  ],
+};
+
+function validateStep(step) {
+  const rules = stepValidation[step];
+  if (!rules) return { valid: true, errors: [] };
+
+  const errors = [];
+  // Clear previous highlights
+  document.querySelectorAll('.field-error').forEach(el => {
+    el.classList.remove('field-error');
+  });
+
+  rules.forEach(rule => {
+    const el = document.getElementById(rule.id);
+    if (!el) return;
+    const isEmpty = rule.type === 'checkbox' ? !el.checked : !el.value.trim();
+    if (isEmpty) {
+      errors.push(rule.label);
+      // Highlight the parent field
+      const fieldWrap = el.closest('.field') || el.parentElement;
+      if (fieldWrap) fieldWrap.classList.add('field-error');
+    }
+  });
+
+  // Extra UL validation
+  if (step === 5 && g('productType') === 'Universal Life (UL)') {
+    ['ulInvestment', 'ulDeposit'].forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (el && !el.value.trim()) {
+        errors.push(i === 0 ? 'UL Investment Option' : 'UL Deposit Level');
+        const fieldWrap = el.closest('.field') || el.parentElement;
+        if (fieldWrap) fieldWrap.classList.add('field-error');
+      }
+    });
+  }
+
+  return { valid: errors.length === 0, errors };
+}
+
+function showValidationToast(errors) {
+  // Remove existing toast
+  const existing = document.getElementById('validation-toast');
+  if (existing) existing.remove();
+
+  const toast = document.createElement('div');
+  toast.id = 'validation-toast';
+  toast.style.cssText = `
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+    background: #c0392b; color: white; border-radius: 10px;
+    padding: 14px 20px; font-size: 13px; font-family: 'DM Sans', sans-serif;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.18); z-index: 9999;
+    max-width: 480px; width: 90%; line-height: 1.5;
+    animation: slideUp 0.25s ease;
+  `;
+
+  const styleEl = document.createElement('style');
+  styleEl.textContent = `@keyframes slideUp { from { opacity:0; transform:translateX(-50%) translateY(12px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }`;
+  document.head.appendChild(styleEl);
+
+  const limitedErrors = errors.slice(0, 5);
+  const more = errors.length > 5 ? ` <em>+${errors.length - 5} more</em>` : '';
+  toast.innerHTML = `<strong>⚠ Please complete all required fields:</strong><br/><span style="opacity:0.9">${limitedErrors.join(', ')}${more}</span>`;
+  document.body.appendChild(toast);
+
+  // Scroll to first error
+  const firstError = document.querySelector('.field-error input, .field-error select, .field-error textarea, .field-error input[type=checkbox]');
+  if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+  // Auto-dismiss after 5 seconds
+  setTimeout(() => { if (toast.parentNode) toast.remove(); }, 5000);
+}
+
 function goTo(step) {
+  // If moving forward, validate current step first
+  if (step > currentStep) {
+    const { valid, errors } = validateStep(currentStep);
+    if (!valid) {
+      showValidationToast(errors);
+      return;
+    }
+  }
+
   document.getElementById('step-' + currentStep).style.display = 'none';
   document.getElementById('nav-' + currentStep)?.classList.remove('active');
   if (currentStep < step) {
@@ -1055,6 +1220,11 @@ function goTo(step) {
   document.getElementById('step-' + currentStep).style.display = 'block';
   document.getElementById('nav-' + currentStep)?.classList.add('active');
   document.getElementById('nav-' + currentStep)?.classList.remove('done');
+
+  // Clear any toast and error highlights on new step
+  const toast = document.getElementById('validation-toast');
+  if (toast) toast.remove();
+  document.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
 
   // Buttons
   document.getElementById('btn-back').disabled = currentStep === 0;
