@@ -959,41 +959,66 @@
       <div class="card">
         <div class="card-title">📐 Need Calculation</div>
         <div class="grid3">
+
+          <!-- Row 1: inputs -->
           <div class="field">
             <label>Income to Replace (Annual) $</label>
-            <input id="incomeReplace" type="number" placeholder="80000" />
+            <input id="incomeReplace" type="number" placeholder="0" oninput="calcNeeds()" />
           </div>
           <div class="field">
             <label>Years to Replace</label>
-            <input id="yearsReplace" type="number" placeholder="10" />
+            <input id="yearsReplace" type="number" placeholder="0" oninput="calcNeeds()" />
           </div>
           <div class="field">
-            <label>Income Replacement Total $</label>
-            <input id="incomeTotal" type="number" placeholder="800000" />
+            <label style="color:var(--accent);font-weight:700;">Income Replacement Total $ ⚡</label>
+            <input id="incomeTotal" type="number" readonly placeholder="Auto-calculated"
+              style="background:#e8f0fc;border-color:#b8cef0;color:var(--accent);font-weight:700;cursor:default;" />
           </div>
+
+          <!-- Row 2: inputs -->
           <div class="field">
             <label>Mortgage / Debt Coverage $</label>
-            <input id="debtCoverage" type="number" placeholder="400000" />
+            <input id="debtCoverage" type="number" placeholder="0" oninput="calcNeeds()" />
           </div>
           <div class="field">
             <label>Final Expenses $</label>
-            <input id="finalExpenses" type="number" placeholder="25000" />
+            <input id="finalExpenses" type="number" placeholder="0" oninput="calcNeeds()" />
           </div>
           <div class="field">
             <label>Education Fund $</label>
-            <input id="educationFund" type="number" placeholder="0" />
+            <input id="educationFund" type="number" placeholder="0" oninput="calcNeeds()" />
           </div>
+
+          <!-- Row 3: all auto -->
           <div class="field">
-            <label>Total Insurance Need $</label>
-            <input id="totalNeed" type="number" placeholder="1225000" />
+            <label style="color:var(--accent);font-weight:700;">Total Insurance Need $ ⚡</label>
+            <input id="totalNeed" type="number" readonly placeholder="Auto-calculated"
+              style="background:#e8f0fc;border-color:#b8cef0;color:var(--accent);font-weight:700;cursor:default;" />
           </div>
           <div class="field">
             <label>Existing Life Coverage $</label>
-            <input id="existingCoverage2" type="number" placeholder="0" />
+            <input id="existingCoverage2" type="number" placeholder="0" oninput="calcNeeds()" />
           </div>
-          <div class="field" style="position:relative">
-            <label>Coverage Gap $ ⚠</label>
-            <input id="coverageGap" type="number" placeholder="1225000" style="border-color: rgba(200,168,75,0.4);" />
+          <div class="field">
+            <label style="color:#b45309;font-weight:700;">Coverage Gap $ ⚡</label>
+            <input id="coverageGap" type="number" readonly placeholder="Auto-calculated"
+              style="background:#fff8ec;border-color:#f5c842;color:#b45309;font-weight:700;cursor:default;" />
+          </div>
+        </div>
+
+        <!-- Summary bar -->
+        <div style="margin-top:18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+          <div style="background:#e8f0fc;border-radius:10px;padding:14px 16px;border:1px solid #b8cef0;text-align:center;">
+            <div style="font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.7px;margin-bottom:4px;">Total Need</div>
+            <div id="summNeed" style="font-size:18px;font-weight:700;color:var(--accent);font-family:'Crimson Pro',serif;">$0</div>
+          </div>
+          <div style="background:#e8f0fc;border-radius:10px;padding:14px 16px;border:1px solid #b8cef0;text-align:center;">
+            <div style="font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.7px;margin-bottom:4px;">Existing Coverage</div>
+            <div id="summCoverage" style="font-size:18px;font-weight:700;color:var(--accent);font-family:'Crimson Pro',serif;">$0</div>
+          </div>
+          <div style="background:#fff8ec;border-radius:10px;padding:14px 16px;border:1px solid #f5c842;text-align:center;">
+            <div style="font-size:10px;font-weight:700;color:#b45309;text-transform:uppercase;letter-spacing:0.7px;margin-bottom:4px;">⚠ Coverage Gap</div>
+            <div id="summGap" style="font-size:18px;font-weight:700;color:#b45309;font-family:'Crimson Pro',serif;">$0</div>
           </div>
         </div>
       </div>
@@ -1353,9 +1378,6 @@ const stepValidation = {
     { id: 'yearsReplace',    label: 'Years to Replace' },
     { id: 'debtCoverage',    label: 'Mortgage / Debt Coverage' },
     { id: 'finalExpenses',   label: 'Final Expenses' },
-    { id: 'totalNeed',       label: 'Total Insurance Need' },
-    { id: 'coverageGap',     label: 'Coverage Gap' },
-    { id: 'needsNotes',      label: 'Additional Notes' },
   ],
   4: [
     { id: 'riskProfile',  label: 'Risk Profile' },
@@ -1593,6 +1615,51 @@ function updatePrimaryNeedValue() {
 
 function syncPrimaryNeed() {
   updatePrimaryNeedValue();
+}
+
+function calcNeeds() {
+  const incomeReplace = parseFloat(document.getElementById('incomeReplace').value) || 0;
+  const yearsReplace  = parseFloat(document.getElementById('yearsReplace').value)  || 0;
+  const debtCoverage  = parseFloat(document.getElementById('debtCoverage').value)  || 0;
+  const finalExpenses = parseFloat(document.getElementById('finalExpenses').value) || 0;
+  const educationFund = parseFloat(document.getElementById('educationFund').value) || 0;
+  const existing      = parseFloat(document.getElementById('existingCoverage2').value) || 0;
+
+  const incomeTotal = incomeReplace * yearsReplace;
+  const totalNeed   = incomeTotal + debtCoverage + finalExpenses + educationFund;
+  const gap         = totalNeed - existing;
+
+  const fmt = v => '$' + Math.round(v).toLocaleString('en-CA');
+
+  // Set readonly fields
+  const setAuto = (id, val) => {
+    const el = document.getElementById(id);
+    el.value = val > 0 ? Math.round(val) : '';
+    el.style.transition = 'background 0.3s';
+    el.style.background = '#d4e9ff';
+    setTimeout(() => { el.style.background = id === 'coverageGap' ? '#fff8ec' : '#e8f0fc'; }, 400);
+  };
+
+  setAuto('incomeTotal', incomeTotal);
+  setAuto('totalNeed',   totalNeed);
+  setAuto('coverageGap', gap < 0 ? 0 : gap);
+
+  // Summary bar
+  document.getElementById('summNeed').textContent     = fmt(totalNeed);
+  document.getElementById('summCoverage').textContent = fmt(existing);
+  document.getElementById('summGap').textContent      = fmt(gap < 0 ? 0 : gap);
+
+  // Gap colour — red if large, amber if moderate
+  const gapEl = document.getElementById('coverageGap');
+  if (gap > 500000) {
+    gapEl.style.borderColor = '#e05c5c';
+    gapEl.style.background  = '#fff0f0';
+    gapEl.style.color       = '#c0392b';
+  } else {
+    gapEl.style.borderColor = '#f5c842';
+    gapEl.style.background  = '#fff8ec';
+    gapEl.style.color       = '#b45309';
+  }
 }
 
 // Keep handlePrimaryNeedSelect as no-op in case any old reference exists
