@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Individual Financial Needs Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --navy: #0b1929;
+    --navy2: #0f2236;
+    --navy3: #162d45;
+    --border: #1e3d5c;
+    --accent: #3d9fd3;
+    --accent2: #5bb8ec;
+    --gold: #c8a84b;
+    --text: #ddeeff;
+    --muted: #5a8aaa;
+    --soft: #8fb8d4;
+    --danger: #e05c5c;
+    --success: #4caf8a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: var(--navy2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .topbar-brand { display: flex; align-items: center; gap: 14px; }
+  .topbar-logo {
+    width: 36px; height: 36px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Crimson Pro', serif;
+    font-size: 18px; font-weight: 700; color: white;
+  }
+  .topbar-title { font-family: 'Crimson Pro', serif; font-size: 20px; font-weight: 600; color: var(--text); }
+  .topbar-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .topbar-badge {
+    background: var(--navy3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+    color: var(--soft);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .dot { width: 7px; height: 7px; background: var(--success); border-radius: 50%; }
+
+  /* ── LAYOUT ── */
+  .layout { display: flex; min-height: calc(100vh - 64px); }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 220px;
+    background: var(--navy2);
+    border-right: 1px solid var(--border);
+    padding: 24px 12px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 64px;
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+  }
+  .sidebar-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    padding: 0 10px;
+    margin-bottom: 10px;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--muted);
+    transition: all 0.15s;
+    margin-bottom: 2px;
+    border: 1px solid transparent;
+  }
+  .nav-item:hover { color: var(--soft); background: var(--navy3); }
+  .nav-item.active {
+    background: rgba(61,159,211,0.15);
+    border-color: rgba(61,159,211,0.3);
+    color: var(--accent2);
+    font-weight: 600;
+  }
+  .nav-item.done { color: var(--success); }
+  .nav-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+  .nav-check { margin-left: auto; color: var(--success); font-size: 12px; }
+
+  /* progress bar */
+  .progress-wrap { padding: 0 10px; margin-top: 24px; }
+  .progress-label { font-size: 10px; color: var(--muted); margin-bottom: 6px; display: flex; justify-content: space-between; }
+  .progress-track { height: 4px; background: var(--navy3); border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 4px; transition: width 0.4s ease; }
+
+  /* ── MAIN ── */
+  .main { flex: 1; padding: 32px; max-width: 820px; }
+
+  .section-header { margin-bottom: 28px; }
+  .section-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .section-desc { font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.6; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--navy2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gold);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── FORM FIELDS ── */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .span2 { grid-column: span 2; }
+  .span3 { grid-column: span 3; }
+
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--soft);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+  .field input, .field select, .field textarea {
+    background: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 12px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--accent);
+  }
+  .field input::placeholder { color: var(--border); }
+  .field select option { background: var(--navy2); }
+  .field textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+  .field .readonly {
+    background: var(--navy3);
+    color: var(--muted);
+    cursor: default;
+  }
+
+  /* ── RIDERS / TAGS ── */
+  .rider-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .rider-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .rider-btn:hover { border-color: var(--accent); color: var(--soft); }
+  .rider-btn.selected {
+    background: rgba(61,159,211,0.2);
+    border-color: var(--accent);
+    color: var(--accent2);
+    font-weight: 600;
+  }
+
+  /* ── CHECKBOXES ── */
+  .check-group { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
+  .check-item { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .check-item input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+  .check-item span { font-size: 13px; color: var(--soft); }
+
+  /* ── INFO BOX ── */
+  .info-box {
+    background: rgba(61,159,211,0.08);
+    border: 1px solid rgba(61,159,211,0.25);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 12px;
+    color: var(--soft);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .info-box strong { color: var(--accent2); }
+
+  .warn-box {
+    background: rgba(224,92,92,0.08);
+    border: 1px solid rgba(224,92,92,0.25);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 12px;
+    color: #e8a0a0;
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .warn-box strong { color: var(--danger); }
+
+  /* ── NAVIGATION BUTTONS ── */
+  .nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .btn {
+    padding: 11px 24px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+    border: none;
+  }
+  .btn-secondary {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--soft);
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent2); }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+  }
+  .btn-primary:hover { background: var(--accent2); }
+  .btn-export {
+    background: var(--gold);
+    color: #1a1000;
+    padding: 13px 32px;
+    font-size: 14px;
+  }
+  .btn-export:hover { background: #d9b95c; }
+  .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  /* ── REVIEW SUMMARY ── */
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  .summary-card {
+    background: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .summary-card .s-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+  .summary-card .s-value { font-size: 14px; font-weight: 600; color: var(--text); }
+
+  .product-highlight {
+    background: linear-gradient(135deg, rgba(61,159,211,0.12), rgba(200,168,75,0.08));
+    border: 1px solid rgba(61,159,211,0.3);
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+  }
+  .product-highlight .ph-label { font-size: 10px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .product-highlight .ph-name { font-family: 'Crimson Pro', serif; font-size: 22px; color: var(--text); font-weight: 600; }
+  .product-highlight .ph-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  .consent-box {
+    background: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+  }
+  .consent-box .cb-title { font-size: 13px; font-weight: 600; color: var(--soft); margin-bottom: 8px; }
+  .consent-box .cb-text { font-size: 11px; color: var(--muted); line-height: 1.7; margin-bottom: 12px; }
+  .consent-box label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 13px; color: var(--text); }
+  .consent-box input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
+
+  /* ── EXPORT SUCCESS ── */
+  .export-success {
+    display: none;
+    background: rgba(76,175,138,0.1);
+    border: 1px solid rgba(76,175,138,0.3);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--success);
+    align-items: center;
+    gap: 10px;
+  }
+  .export-success.show { display: flex; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main { padding: 20px 16px; }
+    .grid2, .grid3 { grid-template-columns: 1fr; }
+    .span2, .span3 { grid-column: span 1; }
+    .summary-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ── PRINT / PDF ── */
+  @media print {
+    .topbar, .sidebar, .nav-buttons { display: none !important; }
+    body { background: white; color: #111; }
+    .main { padding: 0; max-width: 100%; }
+    .card { border: 1px solid #ccc; background: white; break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <div>
+      <div class="topbar-title">Individual Financial Needs Analysis</div>
+      <div class="topbar-sub">Ontario LLQP · Audit-Ready Client File</div>
+    </div>
+  </div>
+  <div class="topbar-badge">
+    <div class="dot"></div>
+    No data stored — 100% private
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-label">FNA Sections</div>
+
+    <div id="nav-0" class="nav-item active" onclick="goTo(0)">
+      <span class="nav-icon">🪪</span> Advisor Info
+      <span class="nav-check" id="check-0"></span>
+    </div>
+    <div id="nav-1" class="nav-item" onclick="goTo(1)">
+      <span class="nav-icon">👤</span> Client Profile
+      <span class="nav-check" id="check-1"></span>
+    </div>
+    <div id="nav-2" class="nav-item" onclick="goTo(2)">
+      <span class="nav-icon">💰</span> Financial Snapshot
+      <span class="nav-check" id="check-2"></span>
+    </div>
+    <div id="nav-3" class="nav-item" onclick="goTo(3)">
+      <span class="nav-icon">📊</span> Needs Analysis
+      <span class="nav-check" id="check-3"></span>
+    </div>
+    <div id="nav-4" class="nav-item" onclick="goTo(4)">
+      <span class="nav-icon">📈</span> Risk Tolerance
+      <span class="nav-check" id="check-4"></span>
+    </div>
+    <div id="nav-5" class="nav-item" onclick="goTo(5)">
+      <span class="nav-icon">📋</span> Recommendation
+      <span class="nav-check" id="check-5"></span>
+    </div>
+    <div id="nav-6" class="nav-item" onclick="goTo(6)">
+      <span class="nav-icon">✍️</span> Disclosure
+      <span class="nav-check" id="check-6"></span>
+    </div>
+    <div id="nav-7" class="nav-item" onclick="goTo(7)">
+      <span class="nav-icon">📄</span> Review & Export
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>Progress</span>
+        <span id="progress-pct">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- STEP 0: ADVISOR INFO -->
+    <!-- ══════════════════════════════════════ -->
+    <div id="step-0">
+      <div class="section-header">
+        <div class="section-eyebrow">Step 1 of 8</div>
+        <div class="section-title">Advisor Information</div>
+        <div class="section-desc">Your details are recorded for compliance and will appear on every client file you generate.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">🪪 Licensed Advisor</div>
+        <div class="grid2">
+          <div class="field">
+            <label>Advisor Full Name *</label>
+            <input id="advisorName" type="text" placeholder="Jane Smith" />
+          </div>
+          <div class="field">
+            <label>LLQP License Number *</label>
+            <input id="licenseNumber" type="text" placeholder="ON-1234567" />
+          </div>
+          <div class="field">
+            <label>License Province</label>
+            <select id="licenseProvince">
+              <option>Ontario</option><option>Quebec</option>
+              <option>British Columbia</option><option>Alberta</option>
+              <option>Manitoba</option><option>Saskatchewan</option>
+              <option>Nova Scotia</option><option>New Brunswick</option>
+              <option>PEI</option><option>Newfoundland</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>MGA / Dealer</label>
+            <input id="mga" type="text" placeholder="Your MGA name" />
+          </div>
+          <div class="field">
+            <label>Meeting Date *</label>
+            <input id="meetingDate" type="date" />
+          </div>
+          <div class="field">
+            <label>Meeting Type</label>
+            <select id="meetingType">
+              <option>In-Person</option>
+              <option>Video Call</option>
+              <option>Phone</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- STEP 1: CLIENT PROFILE -->
+    <!-- ══════════════════════════════════════ -->
+    <div id="step-1" style="display:none">
+      <div class="section-header">
+        <div class="section-eyebrow">Step 2 of 8</div>
+        <div class="section-title">Client Profile</div>
+        <div class="section-desc">Collect full client demographics. This forms the foundation of the FNA and the audit record.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">👤 Personal Details</div>
+        <div class="grid3">
+          <div class="field">
+            <label>First Name *</label>
+            <input id="clientFirst" type="text" placeholder="John" />
+          </div>
+          <div class="field">
+            <label>Last Name *</label>
+            <input id="clientLast" type="text" placeholder="Smith" />
+          </div>
+          <div class="field">
+            <label>Date of Birth *</label>
+            <input id="dob" type="date" />
+          </div>
+          <div class="field">
+            <label>Gender</label>
+            <select id="gender">
+              <option value="">Select…</option>
+              <option>Male</option><option>Female</option>
+              <option>Non-binary</option><option>Prefer not to say</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Smoking Status</label>
+            <select id="smoking">
+              <option>Non-Smoker</option><option>Smoker</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Marital Status</label>
+            <select id="marital">
+              <option value="">Select…</option>
+              <option>Single</option><option>Married</option>
+              <option>Common-Law</option><option>Divorced</option><option>Widowed</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Dependents</label>
+            <select id="dependents">
+              <option>0</option><option>1</option><option>2</option>
+              <option>3</option><option>4</option><option>5+</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Occupation</label>
+            <input id="occupation" type="text" placeholder="e.g. Engineer" />
+          </div>
+          <div class="field">
+            <label>Employer</label>
+            <input id="employer" type="text" placeholder="Company name" />
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📬 Contact & Address</div>
+        <div class="grid3">
+          <div class="field span2">
+            <label>Street Address</label>
+            <input id="address" type="text" placeholder="123 Main Street" />
+          </div>
+          <div class="field">
+            <label>City</label>
+            <input id="city" type="text" placeholder="Toronto" />
+          </div>
+          <div class="field">
+            <label>Province</label>
+            <select id="province">
+              <option>Ontario</option><option>Quebec</option>
+              <option>British Columbia</option><option>Alberta</option>
+              <option>Manitoba</option><option>Saskatchewan</option>
+              <option>Nova Scotia</option><option>New Brunswick</option>
+              <option>PEI</option><option>Newfoundland</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Postal Code</label>
+            <input id="postal" type="text" placeholder="M5V 2T6" />
+          </div>
+          <div class="field">
+            <label>Phone</label>
+            <input id="phone" type="tel" placeholder="416-555-0100" />
+          </div>
+          <div class="field span2">
+            <label>Email</label>
+            <input id="email" type="email" placeholder="john@email.com" />
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">👨‍👩‍👧 Beneficiary</div>
+        <div class="grid2">
+          <div class="field">
+            <label>Beneficiary Name</label>
+            <input id="beneficiary" type="text" placeholder="Mary Smith" />
+          </div>
+          <div class="field">
+            <label>Relationship to Client</label>
+            <input id="benefRel" type="text" placeholder="Spouse, Child, Estate…" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- STEP 2: FINANCIAL SNAPSHOT -->
+    <!-- ══════════════════════════════════════ -->
+    <div id="step-2" style="display:none">
+      <div class="section-header">
+        <div class="section-eyebrow">Step 3 of 8</div>
+        <div class="section-title">Financial Snapshot</div>
+        <div class="section-desc">Document the client's current financial position. All amounts in Canadian dollars.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">💵 Income</div>
+        <div class="grid3">
+          <div class="field">
+            <label>Client Annual Income $</label>
+            <input id="clientIncome" type="number" placeholder="80000" />
+          </div>
+          <div class="field">
+            <label>Spouse / Partner Income $</label>
+            <input id="spouseIncome" type="number" placeholder="0" />
+          </div>
+          <div class="field">
+            <label>Total Household Income $</label>
+            <input id="householdIncome" type="number" placeholder="80000" />
+          </div>
+          <div class="field">
+            <label>Monthly Expenses $</label>
+            <input id="monthlyExpenses" type="number" placeholder="4000" />
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🏦 Assets & Liabilities</div>
+        <div class="grid3">
+          <div class="field">
+            <label>Total Assets $</label>
+            <input id="assets" type="number" placeholder="300000" />
+          </div>
+          <div class="field">
+            <label>Total Liabilities $</label>
+            <input id="liabilities" type="number" placeholder="250000" />
+          </div>
+          <div class="field">
+            <label>Net Worth $</label>
+            <input id="networth" type="number" placeholder="50000" />
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🛡️ Existing Coverage</div>
+        <div class="grid3">
+          <div class="field">
+            <label>Life Insurance Coverage $</label>
+            <input id="existingLife" type="number" placeholder="0" />
+          </div>
+          <div class="field">
+            <label>Disability Insurance</label>
+            <input id="existingDI" type="text" placeholder="None / Group / Individual" />
+          </div>
+          <div class="field">
+            <label>Critical Illness Coverage $</label>
+            <input id="existingCI" type="number" placeholder="0" />
+          </div>
+          <div class="field">
+            <label>Group Benefits at Work?</label>
+            <select id="groupBenefits">
+              <option>No</option><option>Yes – Basic</option>
+              <option>Yes – Comprehensive</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>RRSP Contributions (Annual) $</label>
+            <input id="rrsp" type="number" placeholder="0" />
+          </div>
+          <div class="field">
+            <label>TFSA Contributions (Annual) $</label>
+            <input id="tfsa" type="number" placeholder="0" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- STEP 3: NEEDS ANALYSIS -->
+    <!-- ══════════════════════════════════════ -->
+    <div id="step-3" style="display:none">
+      <div class="section-header">
+        <div class="section-eyebrow">Step 4 of 8</div>
+        <div class="section-title">Needs Analysis</div>
+        <div class="section-desc">Identify the client's insurance needs by category. This determines the coverage gap and drives your recommendation.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">🎯 Primary Need</div>
+        <div class="grid2">
+          <div class="field span2">
+            <label>Primary Insurance Goal (describe in client's words)</label>
+            <input id="primaryNeed" type="text" placeholder="e.g. Protect my family if I die, pay off the mortgage, leave an estate for my children…" />
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📐 Need Calculation</div>
+        <div class="grid3">
+          <div class="field">
+            <label>Income to Replace (Annual) $</label>
+            <input id="incomeReplace" type="number" placeholder="80000" />
+          </div>
+          <div class="field">
+            <label>Years to Replace</label>
+            <input id="yearsReplace" type="number" placeholder="10" />
+          </div>
+          <div class="field">
+            <label>Income Replacement Total $</label>
+            <input id="incomeTotal" type="number" placeholder="800000" />
+          </div>
+          <div class="field">
+            <label>Mortgage / Debt Coverage $</label>
+            <input id="debtCoverage" type="number" placeholder="400000" />
+          </div>
+          <div class="field">
+            <label>Final Expenses $</label>
+            <input id="finalExpenses" type="number" placeholder="25000" />
+          </div>
+          <div class="field">
+            <label>Education Fund $</label>
+            <input id="educationFund" type="number" placeholder="0" />
+          </div>
+          <div class="field">
+            <label>Total Insurance Need $</label>
+            <input id="totalNeed" type="number" placeholder="1225000" />
+          </div>
+          <div class="field">
+            <label>Existing Life Coverage $</label>
+            <input id="existingCoverage2" type="number" placeholder="0" />
+          </div>
+          <div class="field" style="position:relative">
+            <label>Coverage Gap $ ⚠</label>
+            <input id="coverageGap" type="number" placeholder="1225000" style="border-color: rgba(200,168,75,0.4);" />
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">✅ Additional Goals</div>
+        <div class="check-group" style="margin-bottom:16px">
+          <label class="check-item"><input type="checkbox" id="goalTax" /><span>Tax-Sheltered Growth</span></label>
+          <label class="check-item"><input type="checkbox" id="goalEstate" /><span>Estate Transfer</span></label>
+          <label class="check-item"><input type="checkbox" id="goalRetirement" /><span>Retirement Supplement</span></label>
+          <label class="check-item"><input type="checkbox" id="goalBusiness" /><span>Business / Key Person</span></label>
+          <label class="check-item"><input type="checkbox" id="goalCI" /><span>Critical Illness</span></label>
+          <label class="check-item"><input type="checkbox" id="goalDI" /><span>Disability Income</span></label>
+        </div>
+        <div class="field">
+          <label>Additional Notes (document any client concerns or context)</label>
+          <textarea id="needsNotes" placeholder="Record what the client said in their own words…"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- STEP 4: RISK TOLERANCE -->
+    <!-- ══════════════════════════════════════ -->
+    <div id="step-4" style="display:none">
+      <div class="section-header">
+        <div class="section-eyebrow">Step 5 of 8</div>
+        <div class="section-title">Risk Tolerance</div>
+        <div class="section-desc">Document how the client's risk profile was assessed. This is critical when recommending investment components inside a UL policy.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">📈 Risk Profile</div>
+        <div class="grid2">
+          <div class="field">
+            <label>Risk Profile</label>
+            <select id="riskProfile">
+              <option value="">Select…</option>
+              <option>Conservative</option>
+              <option>Moderate Conservative</option>
+              <option>Moderate</option>
+              <option>Moderate Growth</option>
+              <option>Growth</option>
+              <option>Aggressive Growth</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Investment Horizon</label>
+            <select id="horizon">
+              <option value="">Select…</option>
+              <option>Short-term (0–5 years)</option>
+              <option>Medium-term (5–10 years)</option>
+              <option>Long-term (10+ years)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Comfort with Volatility</label>
+            <select id="volatility">
+              <option value="">Select…</option>
+              <option>Very Low – prefer guaranteed returns</option>
+              <option>Low – minor fluctuations acceptable</option>
+              <option>Medium – some ups and downs OK</option>
+              <option>High – significant swings acceptable</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Primary Investment Objective</label>
+            <select id="objective">
+              <option value="">Select…</option>
+              <option>Capital Preservation</option>
+              <option>Income Generation</option>
+              <option>Balanced Growth</option>
+              <option>Capital Growth</option>
+              <option>Tax Minimization</option>
+            </select>
+          </div>
+          <div class="field span2">
+            <label>Risk Assessment Notes</label>
+            <textarea id="riskNotes" placeholder="Document how you determined the client's risk profile, and any specific statements they made…"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- STEP 5: PRODUCT RECOMMENDATION -->
+    <!-- ══════════════════════════════════════ -->
+    <div id="step-5" style="display:none">
+      <div class="section-header">
+        <div class="section-eyebrow">Step 6 of 8</div>
+        <div class="section-title">Product Recommendation</div>
+        <div class="section-desc">Document your recommendation in full. The suitability rationale is the most audit-critical section of this file.</div>
+      </div>
+      <div class="warn-box">
+        <strong>⚠ Compliance Note:</strong> Your suitability rationale must directly connect the client's documented needs, risk tolerance, and financial situation to this specific product recommendation. Vague rationale is the #1 reason FNAs fail compliance audits.
+      </div>
+      <div class="card">
+        <div class="card-title">📋 Product Details</div>
+        <div class="grid3">
+          <div class="field">
+            <label>Product Type *</label>
+            <select id="productType" onchange="toggleULFields()">
+              <option value="">Select…</option>
+              <option>Universal Life (UL)</option>
+              <option>Whole Life – Participating</option>
+              <option>Whole Life – Non-Participating</option>
+              <option>Term 10</option>
+              <option>Term 20</option>
+              <option>Term to 65</option>
+              <option>Term to 100</option>
+              <option>Critical Illness</option>
+              <option>Disability Insurance</option>
+            </select>
+          </div>
+          <div class="field span2">
+            <label>Product Name *</label>
+            <input id="productName" type="text" placeholder="e.g. Manulife UL Performax Gold, Sun Life Whole Life 20-Pay…" />
+          </div>
+          <div class="field">
+            <label>Insurance Company</label>
+            <input id="company" type="text" placeholder="Manulife, Sun Life, Canada Life…" />
+          </div>
+          <div class="field">
+            <label>Face Amount $</label>
+            <input id="faceAmount" type="number" placeholder="500000" />
+          </div>
+          <div class="field">
+            <label>Premium Amount $</label>
+            <input id="premium" type="number" placeholder="200" />
+          </div>
+          <div class="field">
+            <label>Premium Frequency</label>
+            <select id="premiumFreq">
+              <option>Monthly</option><option>Quarterly</option>
+              <option>Semi-Annual</option><option>Annual</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Death Benefit Type</label>
+            <select id="deathBenefit">
+              <option value="">Select…</option>
+              <option>Level Death Benefit</option>
+              <option>Increasing – Face + Cash Value</option>
+              <option>Return of Premium on Death</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- UL FIELDS (show/hide) -->
+      <div id="ul-fields" class="card" style="display:none">
+        <div class="card-title">🌊 Universal Life – Investment Details</div>
+        <div class="grid3">
+          <div class="field">
+            <label>Investment Account Option</label>
+            <select id="ulInvestment">
+              <option value="">Select…</option>
+              <option>Daily Interest Account (Guaranteed)</option>
+              <option>Index Account – S&P 500</option>
+              <option>Index Account – TSX</option>
+              <option>Balanced Portfolio Fund</option>
+              <option>Growth Portfolio Fund</option>
+              <option>Conservative Portfolio Fund</option>
+              <option>Custom Fund Mix</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Deposit Level</label>
+            <select id="ulDeposit">
+              <option value="">Select…</option>
+              <option>Minimum (Cost of Insurance only)</option>
+              <option>Target Premium</option>
+              <option>Maximum (MTAR / MERP limit)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Projected Cash Value (10-yr) $</label>
+            <input id="cashValue" type="number" placeholder="0" />
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">➕ Riders / Add-ons</div>
+        <div class="rider-grid" id="rider-grid">
+          <button class="rider-btn" onclick="toggleRider(this)">Waiver of Premium</button>
+          <button class="rider-btn" onclick="toggleRider(this)">Accidental Death Benefit</button>
+          <button class="rider-btn" onclick="toggleRider(this)">Child Term Rider</button>
+          <button class="rider-btn" onclick="toggleRider(this)">Disability Income Rider</button>
+          <button class="rider-btn" onclick="toggleRider(this)">Critical Illness Rider</button>
+          <button class="rider-btn" onclick="toggleRider(this)">Return of Premium</button>
+          <button class="rider-btn" onclick="toggleRider(this)">Guaranteed Insurability</button>
+          <button class="rider-btn" onclick="toggleRider(this)">Spouse Term Rider</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">⚖️ Suitability Rationale — Audit Critical</div>
+        <div class="field" style="margin-bottom:16px">
+          <label>Suitability Rationale * (explain WHY this product suits this specific client)</label>
+          <textarea id="rationale" rows="5" placeholder="e.g. Client is a 38-year-old non-smoking male with a $1.2M coverage gap, a 10+ year investment horizon, and a stated goal of tax-sheltered growth. A Universal Life policy addresses both the protection gap and the tax-efficient accumulation objective. The index account option aligns with the client's moderate-growth risk profile documented in Section 5. The face amount of $750,000 partially closes the coverage gap while remaining within the client's stated monthly budget of $300…"></textarea>
+        </div>
+        <div class="field" style="margin-bottom:16px">
+          <label>Alternatives Considered</label>
+          <textarea id="alternatives" placeholder="e.g. Term 20 was considered but does not meet the client's estate transfer and tax-sheltering goals. Whole Life was reviewed but premium was outside client's budget…"></textarea>
+        </div>
+        <div class="field">
+          <label>Why This Product Was Ultimately Selected</label>
+          <textarea id="whySelected" placeholder="Summarize the deciding factors that led to this recommendation over the alternatives…"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- STEP 6: DISCLOSURE -->
+    <!-- ══════════════════════════════════════ -->
+    <div id="step-6" style="display:none">
+      <div class="section-header">
+        <div class="section-eyebrow">Step 7 of 8</div>
+        <div class="section-title">Disclosure & Consent</div>
+        <div class="section-desc">Required under Ontario insurance regulations. All disclosures must be documented before the application is submitted.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">📢 Required Disclosures</div>
+        <div class="grid2">
+          <div class="field">
+            <label>Conflicts of Interest</label>
+            <input id="conflicts" type="text" placeholder="None — or describe any conflicts…" value="None" />
+          </div>
+          <div class="field">
+            <label>Advisor Compensation Type</label>
+            <select id="compensation">
+              <option>Commission – First Year + Renewal</option>
+              <option>Fee-Based</option>
+              <option>Fee + Commission</option>
+              <option>Salary</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Is this a Replacement Policy?</label>
+            <select id="replacement">
+              <option>No</option>
+              <option>Yes – Replacement Form completed</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Client Signature Date</label>
+            <input id="sigDate" type="date" />
+          </div>
+        </div>
+      </div>
+      <div class="consent-box">
+        <div class="cb-title">Client Acknowledgment</div>
+        <div class="cb-text">I confirm that my licensed advisor has explained the recommended insurance product including its features, benefits, costs, risks, and limitations. I understand that this Financial Needs Analysis is based on the personal and financial information I provided, and that my advisor is acting in my best interest.</div>
+        <label>
+          <input type="checkbox" id="clientConsent" />
+          Client has acknowledged, agreed, and provided verbal or written consent
+        </label>
+      </div>
+      <div class="consent-box">
+        <div class="cb-title">Advisor Declaration</div>
+        <div class="cb-text">I declare that I have conducted a thorough Financial Needs Analysis with this client, that the product recommendation is in the client's best interest based on the documented information, and that all required disclosures under Ontario insurance regulations have been made. I am licensed under LLQP and am authorized to sell the recommended product.</div>
+        <label>
+          <input type="checkbox" id="advisorConsent" />
+          I confirm this declaration is accurate and complete
+        </label>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- STEP 7: REVIEW & EXPORT -->
+    <!-- ══════════════════════════════════════ -->
+    <div id="step-7" style="display:none">
+      <div class="section-header">
+        <div class="section-eyebrow">Step 8 of 8</div>
+        <div class="section-title">Review & Export Client File</div>
+        <div class="section-desc">Review the summary below, then export the complete FNA as a formatted PDF-ready file.</div>
+      </div>
+
+      <div id="review-summary"></div>
+
+      <div class="card" style="padding: 32px; text-align:center;">
+        <div style="font-size: 48px; margin-bottom: 14px;">📄</div>
+        <div style="font-family:'Crimson Pro',serif; font-size:22px; color:var(--text); margin-bottom:8px;">Download Client FNA File</div>
+        <div style="font-size:13px; color:var(--muted); line-height:1.7; max-width:460px; margin:0 auto 28px;">
+          Downloads a professionally formatted file for <strong style="color:var(--soft)">FNA_LastName_FirstName_Date.html</strong>.<br/>
+          Open it in any browser, then go <strong style="color:var(--soft)">File → Print → Save as PDF</strong> to get your audit-ready PDF.
+        </div>
+
+        <button class="btn btn-export" onclick="exportFNA()" style="font-size:15px; padding:14px 40px; border-radius:10px;">
+          ⬇ &nbsp; Download FNA File
+        </button>
+
+        <div class="export-success" id="export-success" style="margin-top:20px; justify-content:center;">
+          ✓ File downloaded! Open it in Chrome or Edge → File → Print → Save as PDF
+        </div>
+
+        <div style="margin-top:20px; font-size:11px; color:var(--muted);">
+          File: <span id="export-filename" style="color:var(--soft); font-family:monospace;"></span>
+        </div>
+      </div>
+
+      <div class="warn-box" style="margin-top:0">
+        <strong>🗂 Compliance Reminder:</strong> This FNA document must be retained in the client file for a minimum of 7 years as required by Ontario insurance regulations. Store the exported PDF securely in your CRM, encrypted drive, or your firm's approved document management system. Obtain wet or e-signatures as per your firm's policy before submitting the application.
+      </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" id="btn-back" onclick="navigate(-1)" disabled>← Back</button>
+      <button class="btn btn-primary" id="btn-next" onclick="navigate(1)">Next →</button>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /layout -->
+
+<script>
+let currentStep = 0;
+const totalSteps = 8;
+
+// Set today's date as default
+document.getElementById('meetingDate').value = new Date().toISOString().split('T')[0];
+document.getElementById('sigDate').value = new Date().toISOString().split('T')[0];
+
+function goTo(step) {
+  document.getElementById('step-' + currentStep).style.display = 'none';
+  document.getElementById('nav-' + currentStep)?.classList.remove('active');
+  if (currentStep < step) {
+    document.getElementById('nav-' + currentStep)?.classList.add('done');
+    const check = document.getElementById('check-' + currentStep);
+    if (check) check.textContent = '✓';
+  }
+  currentStep = step;
+  document.getElementById('step-' + currentStep).style.display = 'block';
+  document.getElementById('nav-' + currentStep)?.classList.add('active');
+  document.getElementById('nav-' + currentStep)?.classList.remove('done');
+
+  // Buttons
+  document.getElementById('btn-back').disabled = currentStep === 0;
+  document.getElementById('btn-next').style.display = currentStep === totalSteps - 1 ? 'none' : '';
+
+  // Progress
+  const pct = Math.round((currentStep / (totalSteps - 1)) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct + '%';
+
+  // Review
+  if (currentStep === 7) buildReview();
+
+  // Filename
+  updateFilename();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function navigate(dir) {
+  const next = currentStep + dir;
+  if (next < 0 || next >= totalSteps) return;
+  goTo(next);
+}
+
+function toggleULFields() {
+  const type = document.getElementById('productType').value;
+  document.getElementById('ul-fields').style.display = type === 'Universal Life (UL)' ? 'block' : 'none';
+}
+
+function toggleRider(btn) {
+  btn.classList.toggle('selected');
+}
+
+function getSelectedRiders() {
+  return Array.from(document.querySelectorAll('.rider-btn.selected')).map(b => b.textContent.trim());
+}
+
+function g(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+function gb(id) { const el = document.getElementById(id); return el ? el.checked : false; }
+
+function formatC(v) {
+  const n = parseFloat(v);
+  if (!n) return '—';
+  return '$' + n.toLocaleString('en-CA');
+}
+
+function updateFilename() {
+  const last = g('clientLast') || 'Client';
+  const first = g('clientFirst') || '';
+  const date = g('meetingDate') || new Date().toISOString().split('T')[0];
+  document.getElementById('export-filename').textContent = `FNA_${last}_${first}_${date}.html`;
+}
+
+function buildReview() {
+  const riders = getSelectedRiders();
+  const goals = [];
+  if (gb('goalTax')) goals.push('Tax-Sheltered Growth');
+  if (gb('goalEstate')) goals.push('Estate Transfer');
+  if (gb('goalRetirement')) goals.push('Retirement Supplement');
+  if (gb('goalBusiness')) goals.push('Business / Key Person');
+  if (gb('goalCI')) goals.push('Critical Illness');
+  if (gb('goalDI')) goals.push('Disability Income');
+
+  document.getElementById('review-summary').innerHTML = `
+    <div class="product-highlight">
+      <div class="ph-label">Recommended Product</div>
+      <div class="ph-name">${g('productName') || '—'}</div>
+      <div class="ph-sub">${g('productType') || ''} · ${g('company') || ''} · ${formatC(g('faceAmount'))} · ${formatC(g('premium'))}/${g('premiumFreq')}</div>
+    </div>
+    <div class="summary-grid">
+      <div class="summary-card"><div class="s-label">Client</div><div class="s-value">${g('clientFirst')} ${g('clientLast') || '—'}</div></div>
+      <div class="summary-card"><div class="s-label">Meeting Date</div><div class="s-value">${g('meetingDate') || '—'}</div></div>
+      <div class="summary-card"><div class="s-label">Advisor</div><div class="s-value">${g('advisorName') || '—'}</div></div>
+      <div class="summary-card"><div class="s-label">License #</div><div class="s-value">${g('licenseNumber') || '—'}</div></div>
+      <div class="summary-card"><div class="s-label">Coverage Gap</div><div class="s-value">${formatC(g('coverageGap'))}</div></div>
+      <div class="summary-card"><div class="s-label">Risk Profile</div><div class="s-value">${g('riskProfile') || '—'}</div></div>
+    </div>
+    ${goals.length ? `<div class="info-box" style="margin-bottom:16px"><strong>Additional Goals:</strong> ${goals.join(' · ')}</div>` : ''}
+    ${riders.length ? `<div class="info-box" style="margin-bottom:16px"><strong>Riders Selected:</strong> ${riders.join(' · ')}</div>` : ''}
+  `;
+  updateFilename();
+}
+
+/* ════════════════════════════════════════════
+   EXPORT — generates a print-ready HTML file
+   ════════════════════════════════════════════ */
+function exportFNA() {
+  const riders = getSelectedRiders();
+  const goals = [];
+  if (gb('goalTax')) goals.push('Tax-Sheltered Growth');
+  if (gb('goalEstate')) goals.push('Estate Transfer');
+  if (gb('goalRetirement')) goals.push('Retirement Supplement');
+  if (gb('goalBusiness')) goals.push('Business / Key Person');
+  if (gb('goalCI')) goals.push('Critical Illness');
+  if (gb('goalDI')) goals.push('Disability Income');
+
+  const isUL = g('productType') === 'Universal Life (UL)';
+  const today = new Date().toLocaleDateString('en-CA', { year:'numeric', month:'long', day:'numeric' });
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>FNA — ${g('clientFirst')} ${g('clientLast')}</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:#fff;color:#1a2535;font-size:10.5px;line-height:1.55}
+  .page{max-width:760px;margin:0 auto;padding:40px 48px}
+  /* HEADER */
+  .hdr{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5px solid #163458;padding-bottom:16px;margin-bottom:28px}
+  .hdr-left h1{font-family:'Crimson Pro',serif;font-size:24px;color:#163458;letter-spacing:-0.3px}
+  .hdr-left p{font-size:9.5px;color:#4a6f96;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+  .hdr-right{text-align:right;font-size:9.5px;color:#4a6f96}
+  .hdr-right strong{display:block;font-size:13px;color:#1a2535;font-weight:700;margin-bottom:2px}
+  .badge{display:inline-block;background:#163458;color:#fff;font-size:8.5px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.8px;margin-top:5px}
+  /* SECTIONS */
+  .sec{margin-bottom:22px;break-inside:avoid}
+  .sec-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#163458;border-bottom:1px solid #d8e4f0;padding-bottom:5px;margin-bottom:12px}
+  /* GRID */
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px}
+  .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px 16px}
+  .s2{grid-column:span 2}.s3{grid-column:span 3}
+  .fld{margin-bottom:4px}
+  .fld-lbl{font-size:8.5px;font-weight:600;color:#4a6f96;text-transform:uppercase;letter-spacing:0.4px}
+  .fld-val{font-size:10.5px;color:#1a2535;font-weight:500;border-bottom:1px solid #e4ecf5;padding-bottom:2px;min-height:16px}
+  /* BOXES */
+  .highlight{background:#f0f6ff;border-left:4px solid #163458;padding:10px 14px;border-radius:0 8px 8px 0;margin:10px 0}
+  .highlight .hl-title{font-size:8.5px;font-weight:700;color:#163458;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px}
+  .rationale{background:#fffbf0;border:1px solid #e8d070;border-radius:8px;padding:12px 14px;margin:10px 0}
+  .rationale .rl-title{font-size:8.5px;font-weight:700;color:#7a5a00;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
+  /* TABLE */
+  .tbl{width:100%;border-collapse:collapse;font-size:10px}
+  .tbl th{background:#163458;color:#fff;padding:6px 10px;text-align:left;font-size:8.5px;text-transform:uppercase;letter-spacing:0.5px}
+  .tbl td{padding:6px 10px;border-bottom:1px solid #e4ecf5}
+  .tbl tr:nth-child(even) td{background:#f7fafd}
+  .tbl .total td{font-weight:700;background:#eef3ff !important;color:#163458}
+  /* TAGS */
+  .tag{display:inline-block;background:#163458;color:#fff;font-size:8px;font-weight:700;padding:2px 8px;border-radius:20px;margin:2px}
+  /* PRODUCT CARD */
+  .prod-card{background:linear-gradient(135deg,#f0f6ff,#faf8f0);border:1.5px solid #163458;border-radius:10px;padding:16px 20px;margin:10px 0}
+  .prod-card .pc-label{font-size:8.5px;color:#4a6f96;text-transform:uppercase;font-weight:700;letter-spacing:0.5px;margin-bottom:4px}
+  .prod-card .pc-name{font-family:'Crimson Pro',serif;font-size:20px;color:#163458;font-weight:700}
+  .prod-card .pc-sub{font-size:10px;color:#4a6f96;margin-top:3px}
+  /* SIGNATURE */
+  .sig-wrap{margin-top:28px;padding-top:20px;border-top:2px solid #163458}
+  .sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:16px}
+  .sig-block .sb-label{font-size:8.5px;color:#4a6f96;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px}
+  .sig-block .sb-name{font-size:11px;font-weight:700;margin-bottom:2px}
+  .sig-block .sb-detail{font-size:9.5px;color:#4a6f96}
+  .sig-line{margin-top:28px;border-top:1px solid #1a2535;padding-top:4px;font-size:8.5px;color:#8a9ab0}
+  .disclaimer{font-size:8.5px;color:#8a9ab0;margin-top:20px;padding-top:12px;border-top:1px solid #e4ecf5;line-height:1.7}
+  @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div class="page">
+
+      <div class="hdr">
+    <div class="hdr-left">
+      <h1>Individual Financial Needs Analysis</h1>
+      <p>Ontario LLQP · Audit-Ready Client File</p>
+    </div>
+    <div class="hdr-right">
+      <strong>${g('clientFirst')} ${g('clientLast')}</strong>
+      Meeting: ${g('meetingDate')}<br/>
+      Generated: ${today}
+      <div><span class="badge">Compliance Record</span></div>
+    </div>
+  </div>
+
+  <!-- 1. ADVISOR -->
+  <div class="sec">
+    <div class="sec-title">1 · Advisor Information</div>
+    <div class="g3">
+      <div class="fld"><div class="fld-lbl">Advisor Name</div><div class="fld-val">${g('advisorName') || '—'}</div></div>
+      <div class="fld"><div class="fld-lbl">LLQP License #</div><div class="fld-val">${g('licenseNumber') || '—'}</div></div>
+      <div class="fld"><div class="fld-lbl">License Province</div><div class="fld-val">${g('licenseProvince') || 'Ontario'}</div></div>
+      <div class="fld"><div class="fld-lbl">MGA / Dealer</div><div class="fld-val">${g('mga') || '—'}</div></div>
+      <div class="fld"><div class="fld-lbl">Meeting Date</div><div class="fld-val">${g('meetingDate') || '—'}</div></div>
+      <div class="fld"><div class="fld-lbl">Meeting Type</div><div class="fld-val">${g('meetingType') || '—'}</div></div>
+    </div>
+  </div>
+
+  <!-- 2. CLIENT PROFILE -->
+  <div class="sec">
+    <div class="sec-title">2 · Client Profile</div>
+    <div class="g3">
+      <div class="fld"><div class="fld-lbl">Full Name</div><div class="fld-val">${g('clientFirst')} ${g('clientLast')}</div></div>
+      <div class="fld"><div class="fld-lbl">Date of Birth</div><div class="fld-val">${g('dob') || '—'}</div></div>
+      <div class="fld"><div class="fld-lbl">Gender</div><div class="fld-val">${g('gender') || '—'}</div></div>
+      <div class="fld"><div class="fld-lbl">Smoking Status</div><div class="fld-val">${g('smoking') || '—'}</div></div>
+      <div class="fld"><div class="fld-lbl">Marital Status</div><div class="fld-val">${g('marital') || '—'}</div></div>
+      <div class="fld"><div class="fld-lbl">Dependents</div><div class="fld-val">${g('dependents') || '—'}</div></div>
+      <div class="fld"><div class="fld-lbl">Occupation</div><div class="fld-val">${g('occupation') || '—'}</div></div>
+      <div class="fld"><div class="fld-lbl">Employer</div><div class="fld-val">${g('employer') || '—'}</div></div>
+      <div class="fld"><div class="fld-lbl">Phone</div><div class="fld-val">${g('phone') || '—'}</div></div>
+      <div class="fld s3"><div class="fld-lbl">Address</div><div class="fld-val">${g('address') || '—'}, ${g('city') || '—'}, ${g('province') || 'ON'} ${g('postal') || ''}</div></div>
+      <div class="fld"><div class="fld-lbl">Email</div><div class="fld-val">${g('email') || '—'}</div></div>
+      <div class="fld s2"><div class="fld-lbl">Beneficiary</div><div class="fld-val">${g('beneficiary') || '—'} (${g('benefRel') || '—'})</div></div>
+    </div>
+  </div>
+
+  <!-- 3. FINANCIAL SNAPSHOT -->
+  <div class="sec">
+    <div class="sec-title">3 · Financial Snapshot</div>
+    <div class="g3">
+      <div class="fld"><div class="fld-lbl">Client Annual Income</div><div class="fld-val">${formatC(g('clientIncome'))}</div></div>
+      <div class="fld"><div class="fld-lbl">Spouse Income</div><div class="fld-val">${formatC(g('spouseIncome'))}</div></div>
+      <div class="fld"><div class="fld-lbl">Total Household Income</div><div class="fld-val">${formatC(g('householdIncome'))}</div></div>
+      <div class="fld"><div class="fld-lbl">Monthly Expenses</div><div class="fld-val">${formatC(g('monthlyExpenses'))}</div></div>
+      <div class="fld"><div class="fld-lbl">Total Assets</div><div class="fld-val">${formatC(g('assets'))}</div></div>
+      <div class="fld"><div class="fld-lbl">Total Liabilities</div><div class="fld-val">${formatC(g('liabilities'))}</div></div>
+      <div class="fld"><div class="fld-lbl">Net Worth</div><div class="fld-val">${formatC(g('networth'))}</div></div>
+      <div class="fld"><div class="fld-lbl">Existing Life Coverage</div><div class="fld-val">${formatC(g('existingLife'))}</div></div>
+      <div class="fld"><div class="fld-lbl">Group Benefits</div><div class="fld-val">${g('groupBenefits') || '—'}</div></div>
+    </div>
+  </div>
+
+  <!-- 4. NEEDS ANALYSIS -->
+  <div class="sec">
+    <div class="sec-title">4 · Needs Analysis</div>
+    <div class="fld" style="margin-bottom:10px"><div class="fld-lbl">Primary Client Goal</div><div class="fld-val">${g('primaryNeed') || '—'}</div></div>
+    <table class="tbl">
+      <tr><th>Need Category</th><th>Details</th><th>Amount</th></tr>
+      <tr><td>Income Replacement</td><td>${g('yearsReplace') || '—'} years × ${formatC(g('incomeReplace'))}/yr</td><td>${formatC(g('incomeTotal'))}</td></tr>
+      <tr><td>Debt / Mortgage Coverage</td><td>Outstanding liabilities</td><td>${formatC(g('debtCoverage'))}</td></tr>
+      <tr><td>Final Expenses</td><td>Funeral &amp; estate costs</td><td>${formatC(g('finalExpenses'))}</td></tr>
+      <tr><td>Education Fund</td><td>Children's education</td><td>${formatC(g('educationFund'))}</td></tr>
+      <tr><td>Total Insurance Need</td><td></td><td><strong>${formatC(g('totalNeed'))}</strong></td></tr>
+      <tr><td>Less: Existing Coverage</td><td>Current policies in force</td><td>(${formatC(g('existingCoverage2'))})</td></tr>
+      <tr class="total"><td>Coverage Gap</td><td>Recommended coverage to close gap</td><td>${formatC(g('coverageGap'))}</td></tr>
+    </table>
+    ${goals.length ? `<div class="highlight" style="margin-top:10px"><div class="hl-title">Additional Goals</div>${goals.map(g => `<span class="tag">${g}</span>`).join('')}</div>` : ''}
+    ${g('needsNotes') ? `<div class="highlight"><div class="hl-title">Advisor Notes</div>${g('needsNotes')}</div>` : ''}
+  </div>
+
+  <!-- 5. RISK TOLERANCE -->
+  <div class="sec">
+    <div class="sec-title">5 · Risk Tolerance Assessment</div>
+    <div class="g2">
+      <div class="fld"><div class="fld-lbl">Risk Profile</div><div class="fld-val">${g('riskProfile') || '—'}</div></div>
+      <div class="fld"><div class="fld-lbl">Investment Horizon</div><div class="fld-val">${g('horizon') || '—'}</div></div>
+      <div class="fld"><div class="fld-lbl">Volatility Comfort</div><div class="fld-val">${g('volatility') || '—'}</div></div>
+      <div class="fld"><div class="fld-lbl">Primary Objective</div><div class="fld-val">${g('objective') || '—'}</div></div>
+    </div>
+    ${g('riskNotes') ? `<div class="highlight" style="margin-top:8px"><div class="hl-title">Risk Assessment Notes</div>${g('riskNotes')}</div>` : ''}
+  </div>
+
+  <!-- 6. PRODUCT RECOMMENDATION -->
+  <div class="sec">
+    <div class="sec-title">6 · Product Recommendation</div>
+    <div class="prod-card">
+      <div class="pc-label">Recommended Product</div>
+      <div class="pc-name">${g('productName') || '—'}</div>
+      <div class="pc-sub">${g('productType') || ''} · ${g('company') || ''}</div>
+    </div>
+    <div class="g3">
+      <div class="fld"><div class="fld-lbl">Face Amount</div><div class="fld-val">${formatC(g('faceAmount'))}</div></div>
+      <div class="fld"><div class="fld-lbl">Premium</div><div class="fld-val">${formatC(g('premium'))} / ${g('premiumFreq') || 'Monthly'}</div></div>
+      <div class="fld"><div class="fld-lbl">Death Benefit Type</div><div class="fld-val">${g('deathBenefit') || '—'}</div></div>
+      ${isUL ? `
+      <div class="fld"><div class="fld-lbl">UL Investment Option</div><div class="fld-val">${g('ulInvestment') || '—'}</div></div>
+      <div class="fld"><div class="fld-lbl">UL Deposit Level</div><div class="fld-val">${g('ulDeposit') || '—'}</div></div>
+      <div class="fld"><div class="fld-lbl">Projected Cash Value (10yr)</div><div class="fld-val">${formatC(g('cashValue'))}</div></div>
+      ` : ''}
+    </div>
+    ${riders.length ? `<div style="margin-top:10px"><div class="fld-lbl" style="margin-bottom:5px">Riders / Add-ons</div>${riders.map(r => `<span class="tag">${r}</span>`).join('')}</div>` : ''}
+    <div class="rationale" style="margin-top:12px">
+      <div class="rl-title">⚖ Suitability Rationale — Audit Critical</div>
+      <p style="line-height:1.7">${g('rationale') || '—'}</p>
+    </div>
+    ${g('alternatives') ? `<div class="highlight"><div class="hl-title">Alternatives Considered</div>${g('alternatives')}</div>` : ''}
+    ${g('whySelected') ? `<div class="highlight"><div class="hl-title">Why This Product Was Selected</div>${g('whySelected')}</div>` : ''}
+  </div>
+
+  <!-- 7. DISCLOSURE -->
+  <div class="sec">
+    <div class="sec-title">7 · Disclosure &amp; Consent</div>
+    <div class="g3">
+      <div class="fld"><div class="fld-lbl">Conflicts of Interest</div><div class="fld-val">${g('conflicts') || '—'}</div></div>
+      <div class="fld"><div class="fld-lbl">Compensation Type</div><div class="fld-val">${g('compensation') || '—'}</div></div>
+      <div class="fld"><div class="fld-lbl">Replacement Policy</div><div class="fld-val">${g('replacement') || '—'}</div></div>
+    </div>
+    <div class="g2" style="margin-top:8px">
+      <div class="fld"><div class="fld-lbl">Client Acknowledgment</div><div class="fld-val">${gb('clientConsent') ? '✓ Confirmed' : 'Pending'}</div></div>
+      <div class="fld"><div class="fld-lbl">Advisor Declaration</div><div class="fld-val">${gb('advisorConsent') ? '✓ Confirmed' : 'Pending'}</div></div>
+    </div>
+  </div>
+
+  <!-- SIGNATURES -->
+  <div class="sig-wrap">
+    <div class="sec-title" style="border-color:#163458">8 · Signatures &amp; Certification</div>
+    <p style="font-size:9.5px;color:#4a6f96;margin-bottom:14px;line-height:1.6">By signing below, all parties confirm the information provided is accurate and that this Financial Needs Analysis was conducted in accordance with applicable Ontario insurance regulations.</p>
+    <div class="sig-grid">
+      <div class="sig-block">
+        <div class="sb-label">Client Signature</div>
+        <div class="sb-name">${g('clientFirst')} ${g('clientLast')}</div>
+        <div class="sb-detail">Date: ${g('sigDate') || '—'}</div>
+        <div class="sig-line">Client Signature</div>
+      </div>
+      <div class="sig-block">
+        <div class="sb-label">Advisor Signature</div>
+        <div class="sb-name">${g('advisorName') || '—'}</div>
+        <div class="sb-detail">License: ${g('licenseNumber') || '—'} · ${g('licenseProvince') || 'Ontario'} · ${g('mga') || '—'}</div>
+        <div class="sig-line">Advisor Signature</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    This Individual Financial Needs Analysis was prepared by a licensed life insurance advisor under the Life Licence Qualification Program (LLQP) in the Province of ${g('licenseProvince') || 'Ontario'}. This document constitutes the advisor's record of the needs analysis process and is intended for compliance and audit purposes. All product illustrations and projections referenced herein are not guaranteed. This document must be retained in the client file for a minimum of 7 years in accordance with applicable provincial regulations. The information contained herein is confidential and intended solely for the named client and their licensed advisor.
+  </div>
+
+</div>
+</body>
+</html>`;
+
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const last = g('clientLast') || 'Client';
+  const first = g('clientFirst') || '';
+  const date = g('meetingDate') || new Date().toISOString().split('T')[0];
+  a.href = url;
+  a.download = `FNA_${last}_${first}_${date}.html`;
+  a.click();
+  URL.revokeObjectURL(url);
+
+  document.getElementById('export-success').classList.add('show');
+}
+
+// Init
+goTo(0);
+</script>
+</body>
+</html>
