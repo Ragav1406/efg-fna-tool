@@ -92,14 +92,22 @@
     margin-bottom: 2px;
     border: 1px solid transparent;
   }
-  .nav-item:hover { color: var(--soft); background: var(--bg3); }
+  .nav-item:hover { color: var(--muted); background: transparent; cursor: default; }
   .nav-item.active {
     background: #e8f0fc;
     border-color: #b8cef0;
     color: var(--accent);
     font-weight: 600;
+    cursor: default;
   }
-  .nav-item.done { color: var(--success); }
+  .nav-item.done {
+    color: var(--success);
+    cursor: default;
+  }
+  .nav-item.done:hover {
+    color: var(--success);
+    background: transparent;
+  }
   .nav-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
   .nav-check { margin-left: auto; color: var(--success); font-size: 12px; }
 
@@ -391,35 +399,35 @@
   <div class="sidebar">
     <div class="sidebar-label">FNA Sections</div>
 
-    <div id="nav-0" class="nav-item active" onclick="goTo(0)">
+    <div id="nav-0" class="nav-item active">
       <span class="nav-icon">🪪</span> Advisor Info
       <span class="nav-check" id="check-0"></span>
     </div>
-    <div id="nav-1" class="nav-item" onclick="goTo(1)">
+    <div id="nav-1" class="nav-item">
       <span class="nav-icon">👤</span> Client Profile
       <span class="nav-check" id="check-1"></span>
     </div>
-    <div id="nav-2" class="nav-item" onclick="goTo(2)">
+    <div id="nav-2" class="nav-item">
       <span class="nav-icon">💰</span> Financial Snapshot
       <span class="nav-check" id="check-2"></span>
     </div>
-    <div id="nav-3" class="nav-item" onclick="goTo(3)">
+    <div id="nav-3" class="nav-item">
       <span class="nav-icon">📊</span> Needs Analysis
       <span class="nav-check" id="check-3"></span>
     </div>
-    <div id="nav-4" class="nav-item" onclick="goTo(4)">
+    <div id="nav-4" class="nav-item">
       <span class="nav-icon">📈</span> Risk Tolerance
       <span class="nav-check" id="check-4"></span>
     </div>
-    <div id="nav-5" class="nav-item" onclick="goTo(5)">
+    <div id="nav-5" class="nav-item">
       <span class="nav-icon">📋</span> Recommendation
       <span class="nav-check" id="check-5"></span>
     </div>
-    <div id="nav-6" class="nav-item" onclick="goTo(6)">
+    <div id="nav-6" class="nav-item">
       <span class="nav-icon">✍️</span> Disclosure
       <span class="nav-check" id="check-6"></span>
     </div>
-    <div id="nav-7" class="nav-item" onclick="goTo(7)">
+    <div id="nav-7" class="nav-item">
       <span class="nav-icon">📄</span> Review & Export
     </div>
 
@@ -1207,15 +1215,15 @@ function goTo(step) {
       showValidationToast(errors);
       return;
     }
-  }
-
-  document.getElementById('step-' + currentStep).style.display = 'none';
-  document.getElementById('nav-' + currentStep)?.classList.remove('active');
-  if (currentStep < step) {
+    // Only mark as done with ✓ tick when validation passes
     document.getElementById('nav-' + currentStep)?.classList.add('done');
     const check = document.getElementById('check-' + currentStep);
     if (check) check.textContent = '✓';
   }
+
+  document.getElementById('step-' + currentStep).style.display = 'none';
+  document.getElementById('nav-' + currentStep)?.classList.remove('active');
+
   currentStep = step;
   document.getElementById('step-' + currentStep).style.display = 'block';
   document.getElementById('nav-' + currentStep)?.classList.add('active');
