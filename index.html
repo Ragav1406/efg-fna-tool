@@ -622,36 +622,126 @@
         <div class="grid3">
           <div class="field">
             <label>Client Annual Income $</label>
-            <input id="clientIncome" type="number" placeholder="80000" />
+            <input id="clientIncome" type="number" placeholder="0" oninput="calcIncome()" />
           </div>
           <div class="field">
             <label>Spouse / Partner Income $</label>
-            <input id="spouseIncome" type="number" placeholder="0" />
+            <input id="spouseIncome" type="number" placeholder="0" oninput="calcIncome()" />
           </div>
           <div class="field">
-            <label>Total Household Income $</label>
-            <input id="householdIncome" type="number" placeholder="80000" />
+            <label>Other Source Income $</label>
+            <input id="otherIncome" type="number" placeholder="0" oninput="calcIncome()" />
           </div>
           <div class="field">
-            <label>Monthly Expenses $</label>
-            <input id="monthlyExpenses" type="number" placeholder="4000" />
+            <label>Other Income Source (describe)</label>
+            <input id="otherIncomeDesc" type="text" placeholder="e.g. Rental, Self-employed, Investment…" />
+          </div>
+          <div class="field" style="grid-column:span 2">
+            <label style="color: var(--accent); font-weight:700;">Total Household Income $ ⚡</label>
+            <input id="householdIncome" type="number" placeholder="Auto-calculated"
+              readonly
+              style="background:#e8f0fc; border-color:#b8cef0; color:var(--accent); font-weight:700; cursor:default;" />
           </div>
         </div>
+      </div>
+
+      <!-- MONTHLY EXPENSES BREAKDOWN -->
+      <div class="card">
+        <div class="card-title">💳 Monthly Expenses Breakdown</div>
+        <div class="grid3">
+
+          <div class="field">
+            <label>🏠 Mortgage / Rent $</label>
+            <input class="exp-field" id="expMortgage" type="number" placeholder="0" oninput="calcExpenses()" />
+          </div>
+          <div class="field">
+            <label>🚗 Car Payment(s) $</label>
+            <input class="exp-field" id="expCar" type="number" placeholder="0" oninput="calcExpenses()" />
+          </div>
+          <div class="field">
+            <label>⛽ Gas / Transportation $</label>
+            <input class="exp-field" id="expGas" type="number" placeholder="0" oninput="calcExpenses()" />
+          </div>
+          <div class="field">
+            <label>🛒 Groceries / Food $</label>
+            <input class="exp-field" id="expGroceries" type="number" placeholder="0" oninput="calcExpenses()" />
+          </div>
+          <div class="field">
+            <label>💡 Utilities (Hydro/Gas/Water) $</label>
+            <input class="exp-field" id="expUtilities" type="number" placeholder="0" oninput="calcExpenses()" />
+          </div>
+          <div class="field">
+            <label>📱 Phone / Internet / Cable $</label>
+            <input class="exp-field" id="expPhone" type="number" placeholder="0" oninput="calcExpenses()" />
+          </div>
+          <div class="field">
+            <label>🏥 Medical / Prescriptions $</label>
+            <input class="exp-field" id="expMedical" type="number" placeholder="0" oninput="calcExpenses()" />
+          </div>
+          <div class="field">
+            <label>🧒 Childcare / Tuition $</label>
+            <input class="exp-field" id="expChildcare" type="number" placeholder="0" oninput="calcExpenses()" />
+          </div>
+          <div class="field">
+            <label>🎓 Student Loan Payments $</label>
+            <input class="exp-field" id="expStudentLoan" type="number" placeholder="0" oninput="calcExpenses()" />
+          </div>
+          <div class="field">
+            <label>💳 Credit Card / Debt Payments $</label>
+            <input class="exp-field" id="expDebt" type="number" placeholder="0" oninput="calcExpenses()" />
+          </div>
+          <div class="field">
+            <label>🍽️ Dining / Entertainment $</label>
+            <input class="exp-field" id="expDining" type="number" placeholder="0" oninput="calcExpenses()" />
+          </div>
+          <div class="field">
+            <label>🏋️ Gym / Subscriptions $</label>
+            <input class="exp-field" id="expSubs" type="number" placeholder="0" oninput="calcExpenses()" />
+          </div>
+          <div class="field">
+            <label>✈️ Travel / Vacation (monthly avg) $</label>
+            <input class="exp-field" id="expTravel" type="number" placeholder="0" oninput="calcExpenses()" />
+          </div>
+          <div class="field">
+            <label>🔧 Home Maintenance $</label>
+            <input class="exp-field" id="expHome" type="number" placeholder="0" oninput="calcExpenses()" />
+          </div>
+          <div class="field">
+            <label>📦 Other Expenses $</label>
+            <input class="exp-field" id="expOther" type="number" placeholder="0" oninput="calcExpenses()" />
+          </div>
+
+        </div>
+
+        <!-- Total bar -->
+        <div style="margin-top:20px; padding:16px 18px; background:#e8f0fc; border-radius:10px; border:1px solid #b8cef0; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+          <div>
+            <div style="font-size:11px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.8px;">Total Monthly Expenses ⚡ Auto-calculated</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:2px;">Sum of all expense categories above</div>
+          </div>
+          <div style="font-size:22px; font-weight:700; color:var(--accent); font-family:'Crimson Pro',serif;">
+            $<span id="totalExpensesDisplay">0</span>
+          </div>
+        </div>
+        <!-- Hidden input for validation/export -->
+        <input id="monthlyExpenses" type="hidden" value="0" />
       </div>
       <div class="card">
         <div class="card-title">🏦 Assets & Liabilities</div>
         <div class="grid3">
           <div class="field">
             <label>Total Assets $</label>
-            <input id="assets" type="number" placeholder="300000" />
+            <input id="assets" type="number" placeholder="0" oninput="calcNetWorth()" />
           </div>
           <div class="field">
             <label>Total Liabilities $</label>
-            <input id="liabilities" type="number" placeholder="250000" />
+            <input id="liabilities" type="number" placeholder="0" oninput="calcNetWorth()" />
           </div>
           <div class="field">
-            <label>Net Worth $</label>
-            <input id="networth" type="number" placeholder="50000" />
+            <label style="color: var(--accent); font-weight:700;">Net Worth $ ⚡</label>
+            <input id="networth" type="number" placeholder="Auto-calculated"
+              readonly
+              style="background:#e8f0fc; border-color:#b8cef0; color:var(--accent); font-weight:700; cursor:default;" />
           </div>
         </div>
       </div>
@@ -1094,11 +1184,8 @@ const stepValidation = {
   ],
   2: [
     { id: 'clientIncome',    label: 'Client Annual Income' },
-    { id: 'householdIncome', label: 'Total Household Income' },
-    { id: 'monthlyExpenses', label: 'Monthly Expenses' },
     { id: 'assets',          label: 'Total Assets' },
     { id: 'liabilities',     label: 'Total Liabilities' },
-    { id: 'networth',        label: 'Net Worth' },
     { id: 'existingLife',    label: 'Existing Life Insurance Coverage' },
   ],
   3: [
@@ -1261,6 +1348,51 @@ function navigate(dir) {
 function toggleULFields() {
   const type = document.getElementById('productType').value;
   document.getElementById('ul-fields').style.display = type === 'Universal Life (UL)' ? 'block' : 'none';
+}
+
+function calcIncome() {
+  const client = parseFloat(document.getElementById('clientIncome').value) || 0;
+  const spouse = parseFloat(document.getElementById('spouseIncome').value) || 0;
+  const other  = parseFloat(document.getElementById('otherIncome').value)  || 0;
+  const total  = client + spouse + other;
+  const el = document.getElementById('householdIncome');
+  el.value = total > 0 ? total : '';
+  // Flash feedback
+  el.style.transition = 'background 0.3s';
+  el.style.background = '#d4e9ff';
+  setTimeout(() => { el.style.background = '#e8f0fc'; }, 400);
+}
+
+function calcNetWorth() {
+  const assets      = parseFloat(document.getElementById('assets').value)      || 0;
+  const liabilities = parseFloat(document.getElementById('liabilities').value) || 0;
+  const net = assets - liabilities;
+  const el = document.getElementById('networth');
+  el.value = (assets > 0 || liabilities > 0) ? net : '';
+  el.style.transition = 'background 0.3s, color 0.3s';
+  if (net < 0) {
+    el.style.background = '#fff0f0';
+    el.style.borderColor = '#e05c5c';
+    el.style.color = '#c0392b';
+  } else {
+    el.style.background = '#d4e9ff';
+    el.style.borderColor = '#b8cef0';
+    el.style.color = 'var(--accent)';
+    setTimeout(() => { el.style.background = '#e8f0fc'; }, 400);
+  }
+}
+
+function calcExpenses() {
+  const ids = [
+    'expMortgage','expCar','expGas','expGroceries','expUtilities',
+    'expPhone','expMedical','expChildcare','expStudentLoan','expDebt',
+    'expDining','expSubs','expTravel','expHome','expOther'
+  ];
+  const total = ids.reduce((sum, id) => {
+    return sum + (parseFloat(document.getElementById(id).value) || 0);
+  }, 0);
+  document.getElementById('totalExpensesDisplay').textContent = total.toLocaleString('en-CA');
+  document.getElementById('monthlyExpenses').value = total;
 }
 
 function toggleRider(btn) {
@@ -1443,8 +1575,31 @@ function exportFNA() {
     <div class="g3">
       <div class="fld"><div class="fld-lbl">Client Annual Income</div><div class="fld-val">${formatC(g('clientIncome'))}</div></div>
       <div class="fld"><div class="fld-lbl">Spouse Income</div><div class="fld-val">${formatC(g('spouseIncome'))}</div></div>
+      <div class="fld"><div class="fld-lbl">Other Income ${g('otherIncomeDesc') ? '(' + g('otherIncomeDesc') + ')' : ''}</div><div class="fld-val">${formatC(g('otherIncome'))}</div></div>
       <div class="fld"><div class="fld-lbl">Total Household Income</div><div class="fld-val">${formatC(g('householdIncome'))}</div></div>
-      <div class="fld"><div class="fld-lbl">Monthly Expenses</div><div class="fld-val">${formatC(g('monthlyExpenses'))}</div></div>
+      <div class="fld s3" style="margin-top:8px"><div class="fld-lbl">Monthly Expenses Breakdown</div>
+        <table class="tbl" style="margin-top:4px">
+          <tr><th>Category</th><th>Amount/Month</th><th>Category</th><th>Amount/Month</th></tr>
+          ${[
+            ['Mortgage / Rent','expMortgage'],['Car Payment(s)','expCar'],
+            ['Gas / Transportation','expGas'],['Groceries / Food','expGroceries'],
+            ['Utilities','expUtilities'],['Phone / Internet / Cable','expPhone'],
+            ['Medical / Prescriptions','expMedical'],['Childcare / Tuition','expChildcare'],
+            ['Student Loan','expStudentLoan'],['Credit Card / Debt','expDebt'],
+            ['Dining / Entertainment','expDining'],['Gym / Subscriptions','expSubs'],
+            ['Travel / Vacation','expTravel'],['Home Maintenance','expHome'],
+            ['Other','expOther'],['','']
+          ].reduce((rows, item, i) => {
+            if (i % 2 === 0) rows.push([item]);
+            else rows[rows.length-1].push(item);
+            return rows;
+          }, []).map(pair => `<tr>
+            <td>${pair[0][0]}</td><td>${pair[0][1] ? formatC(g(pair[0][1])) : ''}</td>
+            <td>${pair[1] ? pair[1][0] : ''}</td><td>${pair[1] && pair[1][1] ? formatC(g(pair[1][1])) : ''}</td>
+          </tr>`).join('')}
+          <tr class="total"><td colspan="3"><strong>Total Monthly Expenses</strong></td><td><strong>${formatC(g('monthlyExpenses'))}</strong></td></tr>
+        </table>
+      </div>
       <div class="fld"><div class="fld-lbl">Total Assets</div><div class="fld-val">${formatC(g('assets'))}</div></div>
       <div class="fld"><div class="fld-lbl">Total Liabilities</div><div class="fld-val">${formatC(g('liabilities'))}</div></div>
       <div class="fld"><div class="fld-lbl">Net Worth</div><div class="fld-val">${formatC(g('networth'))}</div></div>
