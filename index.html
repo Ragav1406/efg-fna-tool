@@ -7,18 +7,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --bg: #f4f6f9;
+    --bg: #f4f5f7;
     --bg2: #ffffff;
-    --bg3: #eef1f6;
-    --border: #d5dce8;
-    --accent: #1e5fa8;
-    --accent2: #2a78cc;
-    --gold: #1e5fa8;
-    --text: #1a2535;
-    --muted: #6b7c99;
-    --soft: #3d5a80;
+    --bg3: #eaebee;
+    --border: #d4d8e0;
+    --accent: #0d1f3c;
+    --accent2: #1a3560;
+    --gold: #c9973a;
+    --gold2: #b07e28;
+    --gold-light: #fdf3e3;
+    --gold-border: #e8c97a;
+    --text: #0d1f3c;
+    --muted: #5f6b80;
+    --soft: #2a3f60;
     --danger: #c0392b;
-    --success: #1a7a4a;
+    --success: #c9973a;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -30,8 +33,8 @@
 
   /* ── TOP BAR ── */
   .topbar {
-    background: var(--accent);
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+    background: #0d1f3c;
+    border-bottom: 3px solid #c9973a;
     padding: 0 32px;
     height: 64px;
     display: flex;
@@ -43,17 +46,17 @@
   }
   .topbar-brand { display: flex; align-items: center; gap: 14px; }
   .topbar-title { font-family: 'Crimson Pro', serif; font-size: 20px; font-weight: 600; color: #ffffff; }
-  .topbar-sub { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 1px; }
+  .topbar-sub { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 1px; }
   .topbar-badge {
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(201,151,58,0.15);
+    border: 1px solid rgba(201,151,58,0.45);
     border-radius: 20px;
     padding: 4px 12px;
     font-size: 11px;
-    color: rgba(255,255,255,0.9);
+    color: #e8c97a;
     display: flex; align-items: center; gap: 6px;
   }
-  .dot { width: 7px; height: 7px; background: #4cdf9a; border-radius: 50%; }
+  .dot { width: 7px; height: 7px; background: #c9973a; border-radius: 50%; }
 
   /* ── LAYOUT ── */
   .layout { display: flex; min-height: calc(100vh - 64px); }
@@ -94,28 +97,28 @@
   }
   .nav-item:hover { color: var(--muted); background: transparent; cursor: default; }
   .nav-item.active {
-    background: #e8f0fc;
-    border-color: #b8cef0;
-    color: var(--accent);
+    background: var(--gold-light);
+    border-color: var(--gold-border);
+    color: var(--gold2);
     font-weight: 600;
     cursor: default;
   }
   .nav-item.done {
-    color: var(--success);
+    color: var(--gold);
     cursor: default;
   }
   .nav-item.done:hover {
-    color: var(--success);
+    color: var(--gold);
     background: transparent;
   }
   .nav-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
-  .nav-check { margin-left: auto; color: var(--success); font-size: 12px; }
+  .nav-check { margin-left: auto; color: var(--gold); font-size: 12px; }
 
   /* progress bar */
   .progress-wrap { padding: 0 10px; margin-top: 24px; }
   .progress-label { font-size: 10px; color: var(--muted); margin-bottom: 6px; display: flex; justify-content: space-between; }
   .progress-track { height: 5px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 4px; transition: width 0.4s ease; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #c9973a, #e8c97a); border-radius: 4px; transition: width 0.4s ease; }
 
   /* ── MAIN ── */
   .main { flex: 1; padding: 32px; max-width: 820px; }
@@ -126,7 +129,7 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    color: var(--accent2);
+    color: #c9973a;
     margin-bottom: 6px;
   }
   .section-title {
@@ -192,8 +195,8 @@
     width: 100%;
   }
   .field input:focus, .field select:focus, .field textarea:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(30,95,168,0.1);
+    border-color: #c9973a;
+    box-shadow: 0 0 0 3px rgba(201,151,58,0.15);
   }
   .field input::placeholder { color: #b0bcd0; }
   .field select option { background: #fff; color: var(--text); }
@@ -217,11 +220,11 @@
     transition: all 0.15s;
     font-family: 'DM Sans', sans-serif;
   }
-  .rider-btn:hover { border-color: var(--accent); color: var(--accent); background: #e8f0fc; }
+  .rider-btn:hover { border-color: #c9973a; color: #b07e28; background: var(--gold-light); }
   .rider-btn.selected {
-    background: #e8f0fc;
-    border-color: var(--accent);
-    color: var(--accent);
+    background: #0d1f3c;
+    border-color: #c9973a;
+    color: #e8c97a;
     font-weight: 600;
   }
 
@@ -233,8 +236,8 @@
 
   /* ── INFO BOX ── */
   .info-box {
-    background: #eef4ff;
-    border: 1px solid #b8cef0;
+    background: var(--gold-light);
+    border: 1px solid var(--gold-border);
     border-radius: 10px;
     padding: 14px 16px;
     font-size: 12px;
@@ -279,19 +282,19 @@
     border: 1px solid var(--border);
     color: var(--muted);
   }
-  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); background: #e8f0fc; }
+  .btn-secondary:hover { border-color: #0d1f3c; color: #0d1f3c; background: #eaebee; }
   .btn-primary {
-    background: var(--accent);
+    background: #c9973a;
     color: white;
   }
-  .btn-primary:hover { background: var(--accent2); }
+  .btn-primary:hover { background: #b07e28; }
   .btn-export {
-    background: var(--accent);
+    background: #c9973a;
     color: #ffffff;
     padding: 13px 32px;
     font-size: 14px;
   }
-  .btn-export:hover { background: var(--accent2); }
+  .btn-export:hover { background: #b07e28; }
   .btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
   /* ── REVIEW SUMMARY ── */
@@ -306,13 +309,13 @@
   .summary-card .s-value { font-size: 14px; font-weight: 600; color: var(--text); }
 
   .product-highlight {
-    background: linear-gradient(135deg, #eef4ff, #f5f8ff);
-    border: 1px solid #b8cef0;
+    background: linear-gradient(135deg, var(--gold-light), #fff9f0);
+    border: 1px solid var(--gold-border);
     border-radius: 12px;
     padding: 20px 22px;
     margin-bottom: 16px;
   }
-  .product-highlight .ph-label { font-size: 10px; color: var(--accent2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .product-highlight .ph-label { font-size: 10px; color: var(--gold2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
   .product-highlight .ph-name { font-family: 'Crimson Pro', serif; font-size: 22px; color: var(--text); font-weight: 600; }
   .product-highlight .ph-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
@@ -331,13 +334,13 @@
   /* ── EXPORT SUCCESS ── */
   .export-success {
     display: none;
-    background: #edfaf3;
-    border: 1px solid #a8dfc0;
+    background: var(--gold-light);
+    border: 1px solid var(--gold-border);
     border-radius: 10px;
     padding: 14px 18px;
     margin-top: 14px;
     font-size: 13px;
-    color: var(--success);
+    color: var(--gold2);
     align-items: center;
     gap: 10px;
   }
@@ -357,12 +360,12 @@
     user-select: none;
   }
   .need-option:hover {
-    border-color: var(--accent);
-    background: #eef4ff;
+    border-color: var(--gold);
+    background: var(--gold-light);
   }
   .need-option.selected {
-    border-color: var(--accent);
-    background: #e8f0fc;
+    border-color: var(--gold);
+    background: var(--gold-light);
   }
   .need-icon { font-size: 20px; flex-shrink: 0; }
   .need-text { flex: 1; }
@@ -371,7 +374,7 @@
   .need-check {
     font-size: 13px;
     font-weight: 700;
-    color: var(--accent);
+    color: var(--gold);
     opacity: 0;
     transition: opacity 0.15s;
     flex-shrink: 0;
@@ -382,8 +385,8 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: var(--accent);
-    color: white;
+    background: #0d1f3c;
+    color: #e8c97a;
     font-size: 11px;
     font-weight: 600;
     padding: 4px 10px;
@@ -431,7 +434,6 @@
   <div class="topbar-brand">
     <div>
       <div class="topbar-title">Individual Financial Needs Analysis</div>
-      <div class="topbar-sub">Ontario LLQP · Audit-Ready Client File</div>
     </div>
   </div>
   <div class="topbar-badge">
@@ -687,7 +689,7 @@
             <label style="color: var(--accent); font-weight:700;">Total Household Income $ ⚡</label>
             <input id="householdIncome" type="number" placeholder="Auto-calculated"
               readonly
-              style="background:#e8f0fc; border-color:#b8cef0; color:var(--accent); font-weight:700; cursor:default;" />
+              style="background:#fdf3e3; border-color:#e8c97a; color:#b07e28; font-weight:700; cursor:default;" />
           </div>
         </div>
       </div>
@@ -761,12 +763,12 @@
         </div>
 
         <!-- Total bar -->
-        <div style="margin-top:20px; padding:16px 18px; background:#e8f0fc; border-radius:10px; border:1px solid #b8cef0; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+        <div style="margin-top:20px; padding:16px 18px; background:#fdf3e3; border-radius:10px; border:1px solid #e8c97a; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
           <div>
-            <div style="font-size:11px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.8px;">Total Monthly Expenses ⚡ Auto-calculated</div>
+            <div style="font-size:11px; font-weight:700; color:#b07e28; text-transform:uppercase; letter-spacing:0.8px;">Total Monthly Expenses ⚡ Auto-calculated</div>
             <div style="font-size:11px; color:var(--muted); margin-top:2px;">Sum of all expense categories above</div>
           </div>
-          <div style="font-size:22px; font-weight:700; color:var(--accent); font-family:'Crimson Pro',serif;">
+          <div style="font-size:22px; font-weight:700; color:#b07e28; font-family:'Crimson Pro',serif;">
             $<span id="totalExpensesDisplay">0</span>
           </div>
         </div>
@@ -788,7 +790,7 @@
             <label style="color: var(--accent); font-weight:700;">Net Worth $ ⚡</label>
             <input id="networth" type="number" placeholder="Auto-calculated"
               readonly
-              style="background:#e8f0fc; border-color:#b8cef0; color:var(--accent); font-weight:700; cursor:default;" />
+              style="background:#fdf3e3; border-color:#e8c97a; color:#b07e28; font-weight:700; cursor:default;" />
           </div>
         </div>
       </div>
@@ -934,7 +936,7 @@
           </div>
 
           <!-- Selected Goals Summary — shows below tiles as selections are made -->
-          <div id="selectedNeedsWrap" style="display:none; margin-top:16px; background:#e8f0fc; border:1.5px solid #b8cef0; border-radius:10px; padding:14px 16px;">
+          <div id="selectedNeedsWrap" style="display:none; margin-top:16px; background:#fdf3e3; border:1.5px solid #e8c97a; border-radius:10px; padding:14px 16px;">
             <div style="font-size:10px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:10px;">
               ✓ Selected Goals
             </div>
@@ -970,9 +972,9 @@
             <input id="yearsReplace" type="number" placeholder="0" oninput="calcNeeds()" />
           </div>
           <div class="field">
-            <label style="color:var(--accent);font-weight:700;">Income Replacement Total $ ⚡</label>
+            <label style="color:#b07e28;font-weight:700;">Income Replacement Total $ ⚡</label>
             <input id="incomeTotal" type="number" readonly placeholder="Auto-calculated"
-              style="background:#e8f0fc;border-color:#b8cef0;color:var(--accent);font-weight:700;cursor:default;" />
+              style="background:#fdf3e3;border-color:#e8c97a;color:#b07e28;font-weight:700;cursor:default;" />
           </div>
 
           <!-- Row 2: inputs -->
@@ -991,9 +993,9 @@
 
           <!-- Row 3: all auto -->
           <div class="field">
-            <label style="color:var(--accent);font-weight:700;">Total Insurance Need $ ⚡</label>
+            <label style="color:#b07e28;font-weight:700;">Total Insurance Need $ ⚡</label>
             <input id="totalNeed" type="number" readonly placeholder="Auto-calculated"
-              style="background:#e8f0fc;border-color:#b8cef0;color:var(--accent);font-weight:700;cursor:default;" />
+              style="background:#fdf3e3;border-color:#e8c97a;color:#b07e28;font-weight:700;cursor:default;" />
           </div>
           <div class="field">
             <label>Existing Life Coverage $</label>
@@ -1008,13 +1010,13 @@
 
         <!-- Summary bar -->
         <div style="margin-top:18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
-          <div style="background:#e8f0fc;border-radius:10px;padding:14px 16px;border:1px solid #b8cef0;text-align:center;">
-            <div style="font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.7px;margin-bottom:4px;">Total Need</div>
-            <div id="summNeed" style="font-size:18px;font-weight:700;color:var(--accent);font-family:'Crimson Pro',serif;">$0</div>
+          <div style="background:#fdf3e3;border-radius:10px;padding:14px 16px;border:1px solid #e8c97a;text-align:center;">
+            <div style="font-size:10px;font-weight:700;color:#b07e28;text-transform:uppercase;letter-spacing:0.7px;margin-bottom:4px;">Total Need</div>
+            <div id="summNeed" style="font-size:18px;font-weight:700;color:#b07e28;font-family:'Crimson Pro',serif;">$0</div>
           </div>
-          <div style="background:#e8f0fc;border-radius:10px;padding:14px 16px;border:1px solid #b8cef0;text-align:center;">
-            <div style="font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.7px;margin-bottom:4px;">Existing Coverage</div>
-            <div id="summCoverage" style="font-size:18px;font-weight:700;color:var(--accent);font-family:'Crimson Pro',serif;">$0</div>
+          <div style="background:#fdf3e3;border-radius:10px;padding:14px 16px;border:1px solid #e8c97a;text-align:center;">
+            <div style="font-size:10px;font-weight:700;color:#b07e28;text-transform:uppercase;letter-spacing:0.7px;margin-bottom:4px;">Existing Coverage</div>
+            <div id="summCoverage" style="font-size:18px;font-weight:700;color:#b07e28;font-family:'Crimson Pro',serif;">$0</div>
           </div>
           <div style="background:#fff8ec;border-radius:10px;padding:14px 16px;border:1px solid #f5c842;text-align:center;">
             <div style="font-size:10px;font-weight:700;color:#b45309;text-transform:uppercase;letter-spacing:0.7px;margin-bottom:4px;">⚠ Coverage Gap</div>
@@ -1547,8 +1549,8 @@ function calcIncome() {
   el.value = total > 0 ? total : '';
   // Flash feedback
   el.style.transition = 'background 0.3s';
-  el.style.background = '#d4e9ff';
-  setTimeout(() => { el.style.background = '#e8f0fc'; }, 400);
+  el.style.background = '#d0f0d4';
+  setTimeout(() => { el.style.background = '#fdf3e3'; }, 400);
 }
 
 function calcNetWorth() {
@@ -1563,10 +1565,10 @@ function calcNetWorth() {
     el.style.borderColor = '#e05c5c';
     el.style.color = '#c0392b';
   } else {
-    el.style.background = '#d4e9ff';
-    el.style.borderColor = '#b8cef0';
+    el.style.background = '#d0f0d4';
+    el.style.borderColor = '#e8c97a';
     el.style.color = 'var(--accent)';
-    setTimeout(() => { el.style.background = '#e8f0fc'; }, 400);
+    setTimeout(() => { el.style.background = '#fdf3e3'; }, 400);
   }
 }
 
@@ -1636,8 +1638,8 @@ function calcNeeds() {
     const el = document.getElementById(id);
     el.value = val > 0 ? Math.round(val) : '';
     el.style.transition = 'background 0.3s';
-    el.style.background = '#d4e9ff';
-    setTimeout(() => { el.style.background = id === 'coverageGap' ? '#fff8ec' : '#e8f0fc'; }, 400);
+    el.style.background = '#d0f0d4';
+    setTimeout(() => { el.style.background = id === 'coverageGap' ? '#fff8ec' : '#fdf3e3'; }, 400);
   };
 
   setAuto('incomeTotal', incomeTotal);
@@ -1746,15 +1748,15 @@ function exportFNA() {
   body{font-family:'DM Sans',sans-serif;background:#fff;color:#1a2535;font-size:10.5px;line-height:1.55}
   .page{max-width:760px;margin:0 auto;padding:40px 48px}
   /* HEADER */
-  .hdr{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5px solid #163458;padding-bottom:16px;margin-bottom:28px}
-  .hdr-left h1{font-family:'Crimson Pro',serif;font-size:24px;color:#163458;letter-spacing:-0.3px}
+  .hdr{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5px solid #0d1f3c;padding-bottom:16px;margin-bottom:28px}
+  .hdr-left h1{font-family:'Crimson Pro',serif;font-size:24px;color:#0d1f3c;letter-spacing:-0.3px}
   .hdr-left p{font-size:9.5px;color:#4a6f96;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
   .hdr-right{text-align:right;font-size:9.5px;color:#4a6f96}
   .hdr-right strong{display:block;font-size:13px;color:#1a2535;font-weight:700;margin-bottom:2px}
-  .badge{display:inline-block;background:#163458;color:#fff;font-size:8.5px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.8px;margin-top:5px}
+  .badge{display:inline-block;background:#0d1f3c;color:#fff;font-size:8.5px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.8px;margin-top:5px}
   /* SECTIONS */
   .sec{margin-bottom:22px;break-inside:avoid}
-  .sec-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#163458;border-bottom:1px solid #d8e4f0;padding-bottom:5px;margin-bottom:12px}
+  .sec-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#0d1f3c;border-bottom:1px solid #e8c97a;padding-bottom:5px;margin-bottom:12px}
   /* GRID */
   .g2{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px}
   .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px 16px}
@@ -1763,25 +1765,25 @@ function exportFNA() {
   .fld-lbl{font-size:8.5px;font-weight:600;color:#4a6f96;text-transform:uppercase;letter-spacing:0.4px}
   .fld-val{font-size:10.5px;color:#1a2535;font-weight:500;border-bottom:1px solid #e4ecf5;padding-bottom:2px;min-height:16px}
   /* BOXES */
-  .highlight{background:#f0f6ff;border-left:4px solid #163458;padding:10px 14px;border-radius:0 8px 8px 0;margin:10px 0}
-  .highlight .hl-title{font-size:8.5px;font-weight:700;color:#163458;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px}
+  .highlight{background:#fdf3e3;border-left:4px solid #0d1f3c;padding:10px 14px;border-radius:0 8px 8px 0;margin:10px 0}
+  .highlight .hl-title{font-size:8.5px;font-weight:700;color:#0d1f3c;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px}
   .rationale{background:#fffbf0;border:1px solid #e8d070;border-radius:8px;padding:12px 14px;margin:10px 0}
   .rationale .rl-title{font-size:8.5px;font-weight:700;color:#7a5a00;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
   /* TABLE */
   .tbl{width:100%;border-collapse:collapse;font-size:10px}
-  .tbl th{background:#163458;color:#fff;padding:6px 10px;text-align:left;font-size:8.5px;text-transform:uppercase;letter-spacing:0.5px}
+  .tbl th{background:#0d1f3c;color:#fff;padding:6px 10px;text-align:left;font-size:8.5px;text-transform:uppercase;letter-spacing:0.5px}
   .tbl td{padding:6px 10px;border-bottom:1px solid #e4ecf5}
   .tbl tr:nth-child(even) td{background:#f7fafd}
-  .tbl .total td{font-weight:700;background:#eef3ff !important;color:#163458}
+  .tbl .total td{font-weight:700;background:#fdf3e3 !important;color:#0d1f3c}
   /* TAGS */
-  .tag{display:inline-block;background:#163458;color:#fff;font-size:8px;font-weight:700;padding:2px 8px;border-radius:20px;margin:2px}
+  .tag{display:inline-block;background:#0d1f3c;color:#fff;font-size:8px;font-weight:700;padding:2px 8px;border-radius:20px;margin:2px}
   /* PRODUCT CARD */
-  .prod-card{background:linear-gradient(135deg,#f0f6ff,#faf8f0);border:1.5px solid #163458;border-radius:10px;padding:16px 20px;margin:10px 0}
+  .prod-card{background:linear-gradient(135deg,#fdf3e3,#faf8f0);border:1.5px solid #0d1f3c;border-radius:10px;padding:16px 20px;margin:10px 0}
   .prod-card .pc-label{font-size:8.5px;color:#4a6f96;text-transform:uppercase;font-weight:700;letter-spacing:0.5px;margin-bottom:4px}
-  .prod-card .pc-name{font-family:'Crimson Pro',serif;font-size:20px;color:#163458;font-weight:700}
+  .prod-card .pc-name{font-family:'Crimson Pro',serif;font-size:20px;color:#0d1f3c;font-weight:700}
   .prod-card .pc-sub{font-size:10px;color:#4a6f96;margin-top:3px}
   /* SIGNATURE */
-  .sig-wrap{margin-top:28px;padding-top:20px;border-top:2px solid #163458}
+  .sig-wrap{margin-top:28px;padding-top:20px;border-top:2px solid #0d1f3c}
   .sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:16px}
   .sig-block .sb-label{font-size:8.5px;color:#4a6f96;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px}
   .sig-block .sb-name{font-size:11px;font-weight:700;margin-bottom:2px}
@@ -1883,7 +1885,7 @@ function exportFNA() {
     <div class="sec-title">4 · Needs Analysis</div>
     <div class="fld" style="margin-bottom:10px">
       <div class="fld-lbl">Primary Client Goals</div>
-      <div class="fld-val">${g('primaryNeed') ? g('primaryNeed').split(' | ').map(goal => `<span style="display:inline-block;background:#163458;color:#fff;font-size:8px;font-weight:700;padding:2px 8px;border-radius:20px;margin:2px 3px 2px 0;">${goal}</span>`).join('') : '—'}</div>
+      <div class="fld-val">${g('primaryNeed') ? g('primaryNeed').split(' | ').map(goal => `<span style="display:inline-block;background:#0d1f3c;color:#fff;font-size:8px;font-weight:700;padding:2px 8px;border-radius:20px;margin:2px 3px 2px 0;">${goal}</span>`).join('') : '—'}</div>
     </div>
     <table class="tbl">
       <tr><th>Need Category</th><th>Details</th><th>Amount</th></tr>
@@ -1954,7 +1956,7 @@ function exportFNA() {
 
   <!-- SIGNATURES -->
   <div class="sig-wrap">
-    <div class="sec-title" style="border-color:#163458">8 · Signatures &amp; Certification</div>
+    <div class="sec-title" style="border-color:#0d1f3c">8 · Signatures &amp; Certification</div>
     <p style="font-size:9.5px;color:#4a6f96;margin-bottom:14px;line-height:1.6">By signing below, all parties confirm the information provided is accurate and that this Financial Needs Analysis was conducted in accordance with applicable Ontario insurance regulations.</p>
     <div class="sig-grid">
       <div class="sig-block">
